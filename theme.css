@@ -1,0 +1,63 @@
+/* CardFox accessible dark theme: explicit preference, or system preference via JS. */
+:root[data-theme="dark"]{
+ color-scheme:dark;
+ --orange:#e97935;--orange-dark:#ffac74;--orange-deep:#ffd0ad;
+ --apricot:#ffb783;--cream:#30271f;--paper:#252322;--ground:#171717;
+ --ink:#f4eee8;--secondary:#c6b9ad;--line:#49413c;
+ --mint:#203e34;--mint-text:#a4e3ca;--soft:#3b2b20;
+ --shadow:0 4px 18px rgba(0,0,0,.23);
+}
+:root[data-theme="dark"] body{background:var(--ground);color:var(--ink)}
+:root[data-theme="dark"] .masthead{background:#8d3c1d}
+:root[data-theme="dark"] .hero-card{background:#432a1d;color:#fff1e6;border-color:#75442c}
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .txitem,
+:root[data-theme="dark"] .compare-row,
+:root[data-theme="dark"] .benefit-item,
+:root[data-theme="dark"] .source-row,
+:root[data-theme="dark"] .merchant-advice,
+:root[data-theme="dark"] .merchant-transport,
+:root[data-theme="dark"] .notice,
+:root[data-theme="dark"] .update-banner,
+:root[data-theme="dark"] dialog,
+:root[data-theme="dark"] .sheet-body{background:var(--paper);color:var(--ink);border-color:var(--line)}
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea{background:#302d2b;color:var(--ink);border-color:#66584e}
+:root[data-theme="dark"] input::placeholder{color:#b6aaa1}
+:root[data-theme="dark"] option{background:#302d2b;color:#f4eee8}
+:root[data-theme="dark"] .lightbtn,
+:root[data-theme="dark"] .iconbtn,
+:root[data-theme="dark"] .mini-btn,
+:root[data-theme="dark"] .tabs button,
+:root[data-theme="dark"] .view-switch button,
+:root[data-theme="dark"] .benefits-filter button,
+:root[data-theme="dark"] .quick-merchant-row button,
+:root[data-theme="dark"] .chips button,
+:root[data-theme="dark"] .suggestions button{background:#332d29;color:var(--ink);border-color:var(--line)}
+:root[data-theme="dark"] .tabs button.active,
+:root[data-theme="dark"] .view-switch button.selected,
+:root[data-theme="dark"] .benefits-filter button.selected{background:#57331f;color:#ffbb86}
+:root[data-theme="dark"] .bottom-tabs{background:#22201e;border-color:var(--line)}
+:root[data-theme="dark"] .bottom-tabs button{color:#c6b9ad}
+:root[data-theme="dark"] .bottom-tabs button.active{background:#50301f;color:#ffb57e}
+:root[data-theme="dark"] .rights-summary{background:#3b2d22;border-color:#705139;color:#f2d4b8}
+:root[data-theme="dark"] .rights-summary strong{color:#ffbb86}
+:root[data-theme="dark"] .benefit-tags span,
+:root[data-theme="dark"] .chip,
+:root[data-theme="dark"] .daybadge{background:#3c342d;color:#f3d7bd}
+:root[data-theme="dark"] .track{background:#4a4039}
+:root[data-theme="dark"] .track i{background:#f0985d}
+:root[data-theme="dark"] .muted,
+:root[data-theme="dark"] .micro,
+:root[data-theme="dark"] .txmeta,
+:root[data-theme="dark"] .compare-note{color:var(--secondary)}
+:root[data-theme="dark"] a{color:#ffb47c}
+:root[data-theme="dark"] .identity,
+:root[data-theme="dark"] .masthead a{color:#fff}
+:root[data-theme="dark"] .primary{background:#bf521f;color:white}
+:root[data-theme="dark"] .toast{background:#ede1d4;color:#211b17}
+:root[data-theme="dark"] .theme-switch{background:#342d28;color:var(--ink);border:1px solid var(--line)}
+.theme-switch{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font-size:13px;min-height:36px;cursor:pointer}
+.theme-preference{display:grid;gap:8px;margin:12px 0}
+.theme-preference select{width:100%;max-width:360px}
