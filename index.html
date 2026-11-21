@@ -8,15 +8,17 @@
 <meta name="referrer" content="no-referrer">
 <title>刷哪張？｜狐狸的回饋筆記</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css?v=2.5.1">
-<link rel="stylesheet" href="ux.css?v=2.5.1">
-<link rel="stylesheet" href="tight-v22.css?v=2.5.1">
-<link rel="stylesheet" href="rights.css?v=2.5.1">
-<link rel="stylesheet" href="compact-v24.css?v=2.5.1">
-<script src="rules.js?v=2.5.1" defer></script>
-<script src="engine-v22.js?v=2.5.1" defer></script>
-<script src="app.js?v=2.5.1" defer></script>
-<script src="benefits.js?v=2.5.1" defer></script>
+<link rel="stylesheet" href="styles.css?v=2.6.0">
+<link rel="stylesheet" href="ux.css?v=2.6.0">
+<link rel="stylesheet" href="tight-v22.css?v=2.6.0">
+<link rel="stylesheet" href="rights.css?v=2.6.0">
+<link rel="stylesheet" href="compact-v24.css?v=2.6.0">
+<link rel="stylesheet" href="theme.css?v=2.6.0">
+<script src="theme.js?v=2.6.0"></script>
+<script src="rules.js?v=2.6.0" defer></script>
+<script src="engine-v22.js?v=2.6.0" defer></script>
+<script src="app.js?v=2.6.0" defer></script>
+<script src="benefits.js?v=2.6.0" defer></script>
 </head>
 <body>
 <a href="#main" class="skip">跳至主要內容</a>
@@ -26,7 +28,7 @@
       <span class="foxmark" aria-hidden="true"><svg viewBox="0 0 72 72"><path fill="#fffcf7" d="M11 15 24 22Q36 18 48 22L61 15 59 44Q56 58 36 63 16 58 13 44Z"/><path fill="#f9a258" d="M10 13 26 25 36 20 46 25 62 13 58 47 47 60 36 64 25 60 14 47Z"/><path fill="#fffaf1" d="M14 39 30 47 36 54 42 47 58 39 55 52 46 60 36 64 26 60 17 52Z"/><ellipse cx="26" cy="39" rx="2.5" ry="3.2" fill="#543324"/><ellipse cx="46" cy="39" rx="2.5" ry="3.2" fill="#543324"/><path d="m32 53 4 4 4-4Z" fill="#543324"/></svg></span>
       <span><strong>刷哪張？</strong><small>狐狸的回饋筆記</small></span>
     </a>
-    <div class="header-actions"><button type="button" id="check-update" class="update-link" aria-label="檢查信用卡權益更新">檢查權益</button><span class="release"><span class="status-dot"></span> V2.5.1</span></div>
+    <div class="header-actions"><button type="button" id="theme-toggle" class="update-link" aria-label="切換深色模式">☾ 深色</button><button type="button" id="check-update" class="update-link" aria-label="檢查信用卡權益更新">檢查權益</button><span class="release"><span class="status-dot"></span> V2.6</span></div>
   </div>
   <div class="welcome">
     <div class="welcome-text"><h1>今天刷哪張？</h1><p>Richart 優先，逐筆比較三張卡。</p></div>
@@ -115,7 +117,7 @@
   </section>
   <section data-panel="settings" id="panel-settings" class="screen" hidden>
     <div class="screen-heading"><h2>我的設定</h2><p class="muted">確認卡片資格及個人估值；首次使用預設為主要使用者的設定；之後以這台裝置的個人修改為準。</p></div>
-    <div class="settings-grid"><section class="panel">
+    <div class="settings-grid"><section class="panel"><h3 class="mini-title">外觀設定</h3><div class="theme-preference"><label for="theme-choice">顯示模式</label><select id="theme-choice"><option value="system">跟隨裝置（預設）</option><option value="light">淺色模式</option><option value="dark">深色模式</option></select><p class="micro">設定只儲存在此瀏覽器，不會影響信用卡資格或消費紀錄。</p></div></section><section class="panel">
       <h3 class="mini-title">Richart 資格</h3>
       <label for="level">回饋等級</label><select id="level"><option value="1">LEVEL 1（預設；未確認自動扣繳資格）</option><option value="2">LEVEL 2（已確認生效）</option></select>
       <p class="micro">設定自動扣繳須等次期帳單結帳後才可能符合 LEVEL 2；新戶另有期限條件。</p>
