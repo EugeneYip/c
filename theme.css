@@ -61,3 +61,10 @@
 .theme-switch{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font-size:13px;min-height:36px;cursor:pointer}
 .theme-preference{display:grid;gap:8px;margin:12px 0}
 .theme-preference select{width:100%;max-width:360px}
+
+@media(max-width:390px){
+ .header-actions{gap:4px}
+ #theme-toggle{font-size:11px;min-height:32px;padding:4px 7px}
+ .header-actions .update-link:not(#theme-toggle){font-size:11px;min-height:32px;padding:4px 7px}
+ .header-actions .release{font-size:10px;padding:4px 6px}
+}
