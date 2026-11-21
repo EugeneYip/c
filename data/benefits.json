@@ -1,0 +1,463 @@
+{
+  "schemaVersion": 1,
+  "manualReviewedAt": "2026-11-21",
+  "manualReviewTimezone": "Asia/Taipei",
+  "disclaimer": "依公開官方公告人工核對；本清單是主要權益與高實用性活動，不代表涵蓋所有分店、國際組織促銷或客戶專屬優惠。請以銀行實際認列為準。",
+  "sources": [
+    {
+      "id": "richart",
+      "card": "richart",
+      "name": "Richart 權益及注意事項",
+      "url": "https://mkp.taishinbank.com.tw/TsCms/marketing/expose/WM_20261103171652257/index.html",
+      "anchors": [
+        "Pay著刷",
+        "Chill刷",
+        "天天刷"
+      ]
+    },
+    {
+      "id": "line_rules",
+      "card": "line",
+      "name": "中信 LINE Pay 回饋計畫",
+      "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/notice.html",
+      "anchors": [
+        "LINE POINTS",
+        "2.8%",
+        "2026"
+      ]
+    },
+    {
+      "id": "line_offers",
+      "card": "line",
+      "name": "中信 LINE Pay 指定店家優惠",
+      "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/store.html",
+      "anchors": [
+        "Netflix",
+        "IKEA",
+        "2026"
+      ]
+    },
+    {
+      "id": "line_travel",
+      "card": "line",
+      "name": "中信 LINE Pay 旅遊加碼",
+      "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/page_travel.html",
+      "anchors": [
+        "國外實體",
+        "2026"
+      ]
+    },
+    {
+      "id": "air_rules",
+      "card": "air",
+      "name": "中信華航哩程與加碼",
+      "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/index.html",
+      "anchors": [
+        "商務御璽卡",
+        "NT30"
+      ]
+    },
+    {
+      "id": "air_perks",
+      "card": "air",
+      "name": "中信華航卡別福利",
+      "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/feature.html",
+      "anchors": [
+        "商務御璽卡",
+        "旅行"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": "richart",
+      "name": "台新 Richart",
+      "role": "主要使用",
+      "point": "台新Point",
+      "period": "切換方案公告至 2027/12/31",
+      "priority": 1
+    },
+    {
+      "id": "line",
+      "name": "中信 LINE Pay",
+      "role": "比較用卡",
+      "point": "LINE POINTS",
+      "period": "目前核對至 2026/12/31",
+      "priority": 2
+    },
+    {
+      "id": "air",
+      "name": "中信華航商務御璽",
+      "role": "比較用卡",
+      "point": "華夏哩程",
+      "period": "目前核對至 2026/12/31",
+      "priority": 3
+    }
+  ],
+  "offers": [
+    {
+      "id": "r_core",
+      "card": "richart",
+      "kind": "回饋",
+      "title": "基本回饋與 7+1 方案",
+      "headline": "一般消費 0.3%；符合 LEVEL 2 之指定方案通常最高 3.3%",
+      "details": "Pay著刷台新Pay最高 3.8%，LINE Pay／全盈+Pay最高 2.3%；假日刷 2%；Chill刷另有指定商家。每天限切換一次，依臺灣時間當日 23:59 最終方案計算。",
+      "requirements": "須確認 LEVEL 2 生效、指定交易及付款方式；每期加碼消費額上限＝永久信用額度＋NT$300,000。",
+      "start": "2026-07-01",
+      "end": "2027-12-31",
+      "coverage": "partial",
+      "source": "richart"
+    },
+    {
+      "id": "r_chill",
+      "card": "richart",
+      "kind": "限時",
+      "title": "Chill刷指定商家",
+      "headline": "最高 10% 台新Point",
+      "details": "火鍋、燒肉、茶飲、追星與部分運動保健品牌等，依官方列名商家及指定支付方式計算。",
+      "requirements": "非所有分店／商家都有 10%；需符合 LEVEL 2、請款名稱與指定支付路徑。",
+      "start": "2026-07-08",
+      "end": "2026-12-31",
+      "coverage": "partial",
+      "source": "richart"
+    },
+    {
+      "id": "r_insurance",
+      "card": "richart",
+      "kind": "回饋",
+      "title": "指定保費一次付清",
+      "headline": "符合條件最高 1.3% 台新Point",
+      "details": "一般保費一次付清免切換方案；零利率分期、投資型保單、躉繳及海外保險等不適用。",
+      "requirements": "保費回饋與切換方案共用每期加碼額度，限銀行指定付款方式。",
+      "start": "2026-07-01",
+      "end": "2027-12-31",
+      "coverage": "partial",
+      "source": "richart"
+    },
+    {
+      "id": "r_points",
+      "card": "richart",
+      "kind": "點數",
+      "title": "台新Point 效期",
+      "headline": "兩年效期",
+      "details": "銀行會於正卡人生日月份次月底，依規定清除逾兩年的未用點數；並非永久不過期。",
+      "requirements": "實際可使用、兌換與清除日期以 Richart Life 點數明細為準。",
+      "start": "2026-07-01",
+      "end": "2027-12-31",
+      "coverage": "reference",
+      "source": "richart"
+    },
+    {
+      "id": "r_esim",
+      "card": "richart",
+      "kind": "旅行福利",
+      "title": "達檻 eSIM 禮遇",
+      "headline": "帳單一般消費滿 NT$6,000，最高折抵 NT$250",
+      "details": "符合條件可領 3 天不限流量 eSIM 優惠碼，須使用台新與 Klook 指定連結。",
+      "requirements": "僅計 0.3% 的一般消費，需次月限量領券；每月 4,500 組。不是直接免費發放實體卡。",
+      "start": "2026-10-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "richart"
+    },
+    {
+      "id": "r_transfer",
+      "card": "richart",
+      "kind": "旅行福利",
+      "title": "達檻機場接或送",
+      "headline": "帳單一般消費滿 NT$20,000，可領單趟優惠碼",
+      "details": "活動期間最高兩次單趟，透過台新×Klook 專屬連結預約；限日間指定服務區域與車種。",
+      "requirements": "僅計 0.3% 的一般消費；每月限量 2,000 組，需依次月領碼及預約規定。",
+      "start": "2026-10-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "richart"
+    },
+    {
+      "id": "r_line_coupon",
+      "card": "richart",
+      "kind": "限時",
+      "title": "LINE Pay 領券活動",
+      "headline": "符合條件最高 3.8%",
+      "details": "官方有獨立領券活動，並非只切換 Pay著刷就能取得全部加碼。",
+      "requirements": "須領券、綁定台新 LINE 個人化服務及符合當期規則；未納入基本試算。",
+      "start": "2026-10-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "richart"
+    },
+    {
+      "id": "r_miles_exchange",
+      "card": "richart",
+      "kind": "點數",
+      "title": "台新Point 兌換哩程優惠",
+      "headline": "官方公告最高 10% 回饋活動",
+      "details": "2026 年 11–12 月有加碼哩程兌換活動及華航哩程方案，實際兌換比例需在 Richart Life 查看。",
+      "requirements": "兌換比例、可用名額及額外門檻以 App 實際顯示為準；未折入刷卡回饋。",
+      "start": "2026-11-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "richart"
+    },
+    {
+      "id": "r_new",
+      "card": "richart",
+      "kind": "資格",
+      "title": "新戶 LEVEL 2 寬限",
+      "headline": "核卡後 60 天內符合新戶優惠者可享 LEVEL 2",
+      "details": "新申辦 Richart 卡或符合條款的聯名卡，新戶核卡日起 60 天內無須先完成自動扣繳即可享 LEVEL 2。",
+      "requirements": "期滿後依實際帳單扣繳資格判斷，工具目前須手動選 LEVEL。",
+      "start": "2026-07-01",
+      "end": "2027-12-31",
+      "coverage": "reference",
+      "source": "richart"
+    },
+    {
+      "id": "l_core",
+      "card": "line",
+      "kind": "回饋",
+      "title": "國內外一般消費",
+      "headline": "1% LINE POINTS",
+      "details": "一般消費逐筆按回饋率四捨五入；需綁定臺灣 LINE Pay 帳號，排除交易與分期活動不適用。",
+      "requirements": "需使用符合條款的中信 LINE Pay 信用卡，並維持臺灣 LINE Pay 帳號。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "auto",
+      "source": "line_rules"
+    },
+    {
+      "id": "l_foreign",
+      "card": "line",
+      "kind": "回饋",
+      "title": "海外實體消費",
+      "headline": "最高 2.8% LINE POINTS，無上限",
+      "details": "1% 基本＋1.8% 海外實體加碼。面對面實體卡或 Apple Pay 等適格付款方式；不含一般海外網路交易。",
+      "requirements": "指定不回饋地區、例外交易及部分第三方支付不計入。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "auto",
+      "source": "line_rules"
+    },
+    {
+      "id": "l_foreign5",
+      "card": "line",
+      "kind": "限時",
+      "title": "海外實體 5% 登錄加碼",
+      "headline": "最高 5%，額外 2.2% 每歸戶上限 450 點",
+      "details": "2026 年第 4 季每週二開放限量登錄，符合已登錄名額、請款期限及交易認列條件可加碼。",
+      "requirements": "每週二限量登錄、總名額限制、加碼點數不是立即入點；工具僅在確認已登錄後估算。",
+      "start": "2026-10-01",
+      "end": "2026-12-31",
+      "coverage": "partial",
+      "source": "line_travel"
+    },
+    {
+      "id": "l_expiry",
+      "card": "line",
+      "kind": "點數",
+      "title": "LINE POINTS 效期",
+      "headline": "180 天；符合持續入點條件可展延",
+      "details": "一般點數依官方機制計算效期，部分活動條款說明以最後入點日起算 180 天；實際餘額與到期日應以 LINE POINTS 顯示為準。",
+      "requirements": "回饋時程：基本回饋約請款後 5 個營業日，合作商家額外回饋通常較晚；切勿把名目回饋直接視為現金。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "line_rules"
+    },
+    {
+      "id": "l_annual",
+      "card": "line",
+      "kind": "卡片福利",
+      "title": "聯名卡年費",
+      "headline": "符合官方綁定條件可享免年費禮遇",
+      "details": "需確認卡片已有效綁定 LINE Pay，依卡別及當年度免年費條件認定。",
+      "requirements": "非所有卡等或未綁定狀態都能無條件免年費。",
+      "start": "2026-01-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "line_rules"
+    },
+    {
+      "id": "l_shopee",
+      "card": "line",
+      "kind": "商家優惠",
+      "title": "蝦皮指定活動",
+      "headline": "最高 5%（Visa、需登錄）",
+      "details": "2026 下半年官方商家活動，活動期間每季每戶上限 100 點，登錄名額有限。",
+      "requirements": "卡別、登錄與活動額度須先確認；5% 多數為含基本回饋，未直接加到 1% 上。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "line_offers"
+    },
+    {
+      "id": "l_netflix",
+      "card": "line",
+      "kind": "商家優惠",
+      "title": "Netflix 指定活動",
+      "headline": "5%（Visa、需登錄）",
+      "details": "官方商家活動每季每戶回饋上限 100 點，且每月登錄限量。",
+      "requirements": "須確認 Visa 卡別、登錄成功、名額與季度上限；未納入自動比較。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "line_offers"
+    },
+    {
+      "id": "l_ikea",
+      "card": "line",
+      "kind": "商家優惠",
+      "title": "IKEA 指定活動",
+      "headline": "最高 5%（Visa、需登錄）",
+      "details": "每季每戶最高 100 點，名額有限；另有 LINE Pay 付款優惠需分開核對。",
+      "requirements": "實際參與方式、卡別、指定店家與登錄均須符合規定。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "line_offers"
+    },
+    {
+      "id": "l_donki",
+      "card": "line",
+      "kind": "商家優惠",
+      "title": "唐吉訶德指定活動",
+      "headline": "10%（JCB、需登錄）",
+      "details": "官方商家優惠，每季每戶上限 200 點、名額有限。",
+      "requirements": "若實際持有 Visa 版本，不能套用 JCB 優惠。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "line_offers"
+    },
+    {
+      "id": "l_hotels",
+      "card": "line",
+      "kind": "商家優惠",
+      "title": "Hotels.com 指定活動",
+      "headline": "最高 20% LINE POINTS（須特定頁面與折扣碼）",
+      "details": "限 2026/11/17–12/3 公告期間，回饋通常受入住日、指定網頁及其他限制。",
+      "requirements": "限時、需特定網頁及優惠代碼；此為名目最高，不直接加到一般回饋。",
+      "start": "2026-11-17",
+      "end": "2026-12-03",
+      "coverage": "reference",
+      "source": "line_travel"
+    },
+    {
+      "id": "l_coupang",
+      "card": "line",
+      "kind": "商家優惠",
+      "title": "酷澎指定活動",
+      "headline": "火箭速配最高 9%；另有登錄 5% 活動",
+      "details": "官網列出不同類型的活動，不一定能同時疊加。",
+      "requirements": "限指定訂單、Visa 或登錄時段等；須開啟細則確認。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "line_offers"
+    },
+    {
+      "id": "a_core",
+      "card": "air",
+      "kind": "回饋",
+      "title": "商務御璽卡哩程",
+      "headline": "一般 NT$30／哩；指定交易 2 倍、生日海外實體 3 倍",
+      "details": "指定項目含海外面對面、華航或華信官網機票、華航 eMall、Sky Boutique；高階卡適用的指定訂房平台加倍不適用商務御璽。",
+      "requirements": "持卡人華夏會員資料、請款方式、旅遊交易與加碼規則需確認。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "partial",
+      "source": "air_rules"
+    },
+    {
+      "id": "a_cap",
+      "card": "air",
+      "kind": "回饋",
+      "title": "每月加碼哩程上限",
+      "headline": "商務御璽卡每月加碼上限 20,000 哩",
+      "details": "一般消費基本哩與指定加碼哩分別依信用卡回饋計畫計算。",
+      "requirements": "目前未依完整既有當月帳單及個人已領哩數自動扣除剩餘額度。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "air_rules"
+    },
+    {
+      "id": "a_transfer",
+      "card": "air",
+      "kind": "旅行福利",
+      "title": "國際機場接送",
+      "headline": "最高每年 1 次免費機場接或送",
+      "details": "符合近 1 個月新增刷卡 NT$20,000，或近 3 個月累計 NT$100,000，或近 12 個月累計 NT$600,000 等條件之一，可申請相應服務。",
+      "requirements": "商務御璽卡正卡人使用、每月限 300 名，需預約並可能有線上處理費。",
+      "start": "2026-01-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "air_perks"
+    },
+    {
+      "id": "a_airfare",
+      "card": "air",
+      "kind": "旅行福利",
+      "title": "華航與華信購票折扣",
+      "headline": "臺灣出發華航全球航線 95 折起；華信國內航線 95 折起",
+      "details": "指定購票管道、適用艙等、折扣與服務條件須以官方訂票頁面為準。",
+      "requirements": "不是所有票價都折 5%，故不直接納入交易回饋百分比。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "air_perks"
+    },
+    {
+      "id": "a_agoda",
+      "card": "air",
+      "kind": "旅行福利",
+      "title": "Agoda 專屬訂房折扣",
+      "headline": "最高 8% 折扣",
+      "details": "須由活動指定連結或適用住房條件完成預訂。",
+      "requirements": "僅為折扣，不能誤作商務御璽卡 Agoda 訂房 2 倍哩程。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "air_perks"
+    },
+    {
+      "id": "a_insure",
+      "card": "air",
+      "kind": "保險",
+      "title": "旅行意外與不便保障",
+      "headline": "旅行平安險最高 NT$5,000 萬",
+      "details": "官方並列班機延誤險每事故最高 NT$10,000、行李延誤最高 NT$10,000、行李遺失最高 NT$30,000。",
+      "requirements": "有投保、購票比例、承保期間、年齡、事故定義等條件；不保證全額理賠。",
+      "start": "2026-01-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "air_perks"
+    },
+    {
+      "id": "a_fee",
+      "card": "air",
+      "kind": "卡片福利",
+      "title": "商務御璽卡年費",
+      "headline": "首年免年費；其後正卡公告 NT$1,800／年",
+      "details": "附卡公告 NT$900／年；留意銀行是否另有當期減免辦法。",
+      "requirements": "年費是持有成本，與消費回饋分開展示；未提供個人核發日，不能推定何時應繳。",
+      "start": "2026-01-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "air_perks"
+    },
+    {
+      "id": "a_welcome",
+      "card": "air",
+      "kind": "新戶",
+      "title": "商務御璽卡新戶哩程",
+      "headline": "符合條件最高 2,000 哩（迎賓＋首刷）",
+      "details": "綁定華夏會員並完成條款指定首刷後，迎賓 1,000 哩；新戶核卡 30 天消費滿 NT$888 再享 1,000 哩。",
+      "requirements": "限新戶及指定期限，非既有持卡人日常消費回饋。",
+      "start": "2026-07-01",
+      "end": "2026-12-31",
+      "coverage": "reference",
+      "source": "air_rules"
+    }
+  ]
+}

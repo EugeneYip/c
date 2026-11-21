@@ -8,13 +8,14 @@
 <meta name="referrer" content="no-referrer">
 <title>刷哪張？｜狐狸的回饋筆記</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css?v=2.2.0">
-<link rel="stylesheet" href="ux.css?v=2.2.0">
-<link rel="stylesheet" href="tight-v22.css?v=2.2.0">
-<script src="rules.js?v=2.2.0" defer></script>
-<script src="engine-v22.js?v=2.2.0" defer></script>
-<script src="app.js?v=2.2.0" defer></script>
-<script src="updates.js?v=2.2.0" defer></script>
+<link rel="stylesheet" href="styles.css?v=2.3.0">
+<link rel="stylesheet" href="ux.css?v=2.3.0">
+<link rel="stylesheet" href="tight-v22.css?v=2.3.0">
+<link rel="stylesheet" href="rights.css?v=2.3.0">
+<script src="rules.js?v=2.3.0" defer></script>
+<script src="engine-v22.js?v=2.3.0" defer></script>
+<script src="app.js?v=2.3.0" defer></script>
+<script src="benefits.js?v=2.3.0" defer></script>
 </head>
 <body>
 <a href="#main" class="skip">跳至主要內容</a>
@@ -24,18 +25,19 @@
       <span class="foxmark" aria-hidden="true"><svg viewBox="0 0 72 72"><path fill="#fffcf7" d="M11 15 24 22Q36 18 48 22L61 15 59 44Q56 58 36 63 16 58 13 44Z"/><path fill="#f9a258" d="M10 13 26 25 36 20 46 25 62 13 58 47 47 60 36 64 25 60 14 47Z"/><path fill="#fffaf1" d="M14 39 30 47 36 54 42 47 58 39 55 52 46 60 36 64 26 60 17 52Z"/><ellipse cx="26" cy="39" rx="2.5" ry="3.2" fill="#543324"/><ellipse cx="46" cy="39" rx="2.5" ry="3.2" fill="#543324"/><path d="m32 53 4 4 4-4Z" fill="#543324"/></svg></span>
       <span><strong>刷哪張？</strong><small>狐狸的回饋筆記</small></span>
     </a>
-    <div class="header-actions"><button type="button" id="check-update" class="update-link">檢查更新</button><span class="release"><span class="status-dot"></span> V2.2</span></div>
+    <div class="header-actions"><button type="button" id="check-update" class="update-link" aria-label="檢查信用卡權益更新">檢查權益</button><span class="release"><span class="status-dot"></span> V2.3</span></div>
   </div>
   <div class="welcome">
-    <div class="welcome-text"><h1>今天刷哪張？</h1><p>Richart 優先，逐筆比較三張卡。</p><p class="update-note" id="update-status" role="status" aria-live="polite"></p></div>
+    <div class="welcome-text"><h1>今天刷哪張？</h1><p>Richart 優先，逐筆比較三張卡。</p></div>
     <div class="welcome-fox" aria-hidden="true"><svg viewBox="0 0 72 72"><path fill="#fff5e9" d="M10 14 26 25 36 20 46 25 62 14 58 45 47 60 36 64 25 60 14 45Z"/><path fill="#ffcf9c" d="M14 39 30 47 36 54 42 47 58 39 55 52 46 60 36 64 26 60 17 52Z"/><ellipse cx="26" cy="39" rx="2.6" ry="3" fill="#663d29"/><ellipse cx="46" cy="39" rx="2.6" ry="3" fill="#663d29"/><path d="m32 53 4 4 4-4Z" fill="#663d29"/></svg></div>
   </div>
 </header>
 <div class="app-shell" id="main">
-  <div class="update-banner" id="update-banner" hidden><span>發現新版網站，可以立即更新。</span><button type="button" id="refresh-site">立即更新</button></div>
+
   <nav class="tabs top-tabs" aria-label="主要功能">
     <button type="button" data-view="today" class="active" aria-current="page">今日建議</button>
     <button type="button" data-view="lookup">店家速查</button>
+    <button type="button" data-view="benefits">權益總覽</button>
     <button type="button" data-view="settings">我的設定</button>
   </nav>
   <section data-panel="today" id="panel-today" class="screen">
@@ -91,6 +93,24 @@
     <section class="panel" aria-live="polite"><h3 class="mini-title">查詢結果</h3><div id="lookup-result"></div></section>
     <section class="panel"><h3 class="mini-title">關於店家認列</h3><p class="muted">官方列名商家也可能因分店、第三方支付、實際請款名稱或 MCC 不符合而無法獲得加碼。未列名的商家不會自動假設符合高回饋；可自行選擇類別試算，結果會標示「待確認」。</p></section>
   </section>
+  <section data-panel="benefits" id="panel-benefits" class="screen" hidden>
+    <div class="screen-heading"><h2>信用卡權益總覽</h2><p class="muted">官方條款、限時優惠與福利分開列示。需要登錄或特殊資格者，不會直接當成保證回饋。</p></div>
+    <section class="panel rights-check" aria-labelledby="check-h">
+      <div class="section-head"><div><h2 id="check-h">銀行權益更新檢查</h2></div><button type="button" id="benefits-refresh" class="primary">重新檢查</button></div>
+      <p class="micro">監測銀行公開網頁與前次機器比對基準的內容差異。<strong>不代表銀行已確認個人資格，也不會未經核對自動調整回饋率。</strong></p>
+      <div id="benefit-check-summary" class="rights-summary" aria-live="polite">尚未取得銀行公告的自動比對狀態。</div>
+      <div id="benefit-check-list" class="right-source-list"></div>
+      <p id="check-source-note" class="micro"></p>
+    </section>
+    <section class="panel rights-inventory" aria-labelledby="rights-h">
+      <div class="section-head"><div><h2 id="rights-h">已整理的卡片福利</h2><p id="manual-reviewed" class="micro">正在載入人工核對日期…</p></div></div>
+      <div id="benefits-filter" class="benefits-filter" role="group" aria-label="選擇信用卡"></div>
+      <p id="benefit-count" class="micro">載入中…</p>
+      <div id="benefits-results" class="benefit-list" aria-live="polite"></div>
+      <button id="benefits-more" type="button" class="textbtn benefit-more" hidden>顯示更多</button>
+      <p class="micro">福利不是每筆回饋：活動期間、特約店、卡別、年費、登錄、請款 MCC、回饋額度與點數效期，均請核對每項官方條款。未列名商家或新優惠不會自動套入計算。</p>
+    </section>
+  </section>
   <section data-panel="settings" id="panel-settings" class="screen" hidden>
     <div class="screen-heading"><h2>我的設定</h2><p class="muted">確認卡片資格及個人估值；設定僅存在這台裝置。</p></div>
     <div class="settings-grid"><section class="panel">
@@ -123,9 +143,9 @@
       <li><a target="_blank" rel="noopener noreferrer" href="https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/feature.html">中信華航商務御璽卡權益</a></li>
     </ul><p class="micro">各卡實際回饋依銀行請款、入帳、MCC、排除交易、優惠名額與個人資格為準。工具未涵蓋全部限時商家優惠、LINE Pay 領券、台新完整聯卡中心小額支付名單、跨期信用額度控管，亦未計入哩程兌換的機票稅費。無法確認條件時不應視為保證回饋。</p><p class="micro">獨立製作的非官方工具。本站不要求卡號、密碼或驗證碼。</p></section>
   </section>
-  <footer class="footer">狐狸幫你算，最後還是以銀行規定為準。<span>© 刷哪張？ v2.2</span></footer>
+  <footer class="footer">狐狸幫你算，最後還是以銀行規定為準。<span>© 刷哪張？ v2.3</span></footer>
 </div>
-<nav class="tabs bottom-tabs" aria-label="手機功能選單"><button data-view="today" type="button" class="active" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 11 9-7 9 7v9h-6v-6H9v6H3z"/></svg>今日</button><button data-view="lookup" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>速查</button><button data-view="settings" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 3.5h6l.7 2.4 2 .9 2.2-1.2 3 5.2-2 1.7v2.4l2 1.7-3 5.2-2.2-1.2-2 .9L15 24H9l-.7-2.4-2-.9-2.2 1.2-3-5.2 2-1.7v-2.4l-2-1.7 3-5.2 2.2 1.2 2-.9z" transform="translate(0 -1.3) scale(.96)"/><circle cx="12" cy="12" r="3"/></svg>設定</button></nav>
+<nav class="tabs bottom-tabs" aria-label="手機功能選單"><button data-view="today" type="button" class="active" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 11 9-7 9 7v9h-6v-6H9v6H3z"/></svg>今日</button><button data-view="lookup" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>速查</button><button data-view="benefits" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M12 10v11M3 14h18M12 10c-7-5-8-10-5-10 4 0 5 6 5 10Zm0 0c7-5 8-10 5-10-4 0-5 6-5 10Z" transform="translate(0 2)"/></svg>權益</button><button data-view="settings" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 3.5h6l.7 2.4 2 .9 2.2-1.2 3 5.2-2 1.7v2.4l2 1.7-3 5.2-2.2-1.2-2 .9L15 24H9l-.7-2.4-2-.9-2.2 1.2-3-5.2 2-1.7v-2.4l-2-1.7 3-5.2 2.2 1.2 2-.9z" transform="translate(0 -1.3) scale(.96)"/><circle cx="12" cy="12" r="3"/></svg>設定</button></nav>
 <dialog id="entry-dialog" aria-labelledby="entry-title">
 <form method="dialog" id="entry-form">
   <div class="sheet-head"><div><h2 id="entry-title">加入一筆消費</h2></div><button type="button" class="iconbtn close-dialog" aria-label="關閉">×</button></div>

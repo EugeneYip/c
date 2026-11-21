@@ -103,3 +103,24 @@ V2.1 針對手機使用者回報的問題加入以下改善：
 - [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/design-principles)：資訊階層、進階展開、操作清晰度。
 
 上述服務只作功能與資訊架構研究，本專案沒有複製其受著作權保護的原始碼或介面資產。
+
+## V2.3：銀行權益更新檢查與三卡福利總覽（2026-11-21）
+
+本版區分三個概念：
+1. **軟體版本**：右上角顯示 V2.3，不再把檢查軟體版本當成「銀行權益已更新」。
+2. **人工核對權益資料**：data/benefits.json 記載 2026-11-21 人工核對的 28 項主要回饋、福利、年費、有效期限及官方來源，其中部分不納入計算（需要登錄／特定卡別／資格不明）。
+3. **銀行公告自動比對**：GitHub Actions 的 check-benefits.yml 每日以臺北時間約上午 09:17 抓取六個官方公開頁面；比對可見文字內容 fingerprint。若不同，只標示「疑似內容異動／待人工確認」，不會未經審核就調整回饋率。
+
+使用者按首頁「檢查權益」進入「權益」頁籤，檢查 GitHub 公開監測紀錄的最近時間、來源、疑似文字變化及擷取錯誤，另可在三張卡間切換權益列表。倘銀行網站反爬蟲、GitHub Actions 未執行、資料超過 48 小時或網路離線，工具會如實顯示「無法確認」；絕不把尚未擷取的資料稱為最新。每日監測不代表任何用戶持有的卡片、回饋名額及請款已確認。
+
+**監測資料**：data/check-status.json（最後檢查狀態），data/check-baselines.json（首次取得的官方頁面標準化文字基準）。一般使用者只需要公開讀取；不用也不應提供 GitHub Token、銀行登入資訊、卡號。由於 Pages 可能不即時重新發布 bot commit，前端優先讀取 GitHub raw 版本，必要時退回同站備援紀錄並警示。
+
+**只列主要活動，不保證完整商家覆蓋**：已整理的內容有台新 Richart 7+1、Chill刷、保費、eSIM、接送、點數效期與兌換；中信 LINE Pay 一般與海外加碼、LINE POINTS 180 天效期、Visa/JCB 指定商家登錄優惠；中信華航商務御璽 NT$30/哩、指定 2 倍、生日 3 倍、20,000 哩加碼上限、年費、機場接送、機票折扣、Agoda、保險和新戶哩程。指定商家優惠常有最高回饋、每季額度及人數限制，因此只有明確符合回饋模型者才會納入自動試算。
+
+注意：Richart 每期帳單加碼金額上限＝永久信用額度加計 NT$300,000；目前的設定只支援「加碼額度已用完」的保守切換，尚不能精算部分剩餘。中信華航每月加碼哩程 20,000 哩上限與當月既有哩程、以及獨立商家限額亦未由工具自動取得。請配合官方帳單核對。
+
+開發驗收：
+- node --test tests/rules.test.cjs tests/engine.test.cjs tests/benefits.test.cjs
+- python scripts/check_benefits.py --self-test
+- node tests/browser.test.cjs（CI 使用 Chromium + WebKit，新增權益頁與監測狀態模擬）
+- 每日來源監測工作流程的失敗或改版資訊見 GitHub Actions > Bank rights monitoring。

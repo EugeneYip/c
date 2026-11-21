@@ -80,16 +80,33 @@ const path=require('node:path');
      await page.locator('#lookup-add').click();
      assert.equal(await page.locator('#tx-count').innerText(),'3');
      await assertNoOverflow('lookup');
-     // Update checking must be a genuine, same-origin request.
+     // "檢查權益" must never merely repeat the website's version number.
+     const remote='https://raw.githubusercontent.com/EugeneYip/c/main/data/check-status.json?*';
+     const checkedAt=new Date().toISOString();
+     const baseline={schemaVersion:1,checkedAt,manualReviewedAt:'2026-11-21',
+       sources:[{id:'richart',status:'unchanged',lastSuccessAt:checkedAt},
+                {id:'line_rules',status:'baseline',lastSuccessAt:checkedAt}]};
+     await page.route(remote,route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(baseline)}));
      await page.locator('#check-update').click();
-     await page.locator('#update-status').getByText(/已是最新版/).waitFor();
-     await page.route('**/version.json?*',route=>route.fulfill({status:200,contentType:'application/json',body:'{"version":"2.3.0"}'}));
-     await page.locator('#check-update').click();
-     await page.locator('#update-banner').waitFor({state:'visible'});
-     await assertNoOverflow('update banner');
+     await page.locator('#benefit-check-summary').getByText(/官方公告比對紀錄/).waitFor();
+     assert.equal(await page.locator('#panel-benefits').isVisible(),true);
+     assert.ok((await page.locator('.benefit-item').count())>=8,'missing benefit directory');
+     assert.ok(!(await page.locator('#benefit-check-summary').innerText()).includes('最新版 V'),'not a version-only checker');
+     await assertNoOverflow('rights overview');
+     await page.unroute(remote);
+     const changed={...baseline,sources:[{id:'richart',status:'changed',lastSuccessAt:checkedAt,
+       diff:{added:['2026 方案優惠改動'],removed:['舊方案優惠']}}]};
+     await page.route(remote,route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(changed)}));
+     await page.locator('#benefits-refresh').click();
+     await page.locator('#benefit-check-summary').getByText(/疑似官方公告變更/).waitFor();
+     assert.match(await page.locator('#benefit-check-list').innerText(),/疑似公告內容變動/);
+     await page.screenshot({path:path.join(folder,engine+'-'+name+'-benefits.png'),fullPage:true});
+     await nav('today').click();
      await page.screenshot({path:path.join(folder,engine+'-'+name+'-today.png'),fullPage:true});
-     await nav('lookup').click();await page.screenshot({path:path.join(folder,engine+'-'+name+'-lookup.png'),fullPage:true});
-     await nav('settings').click();await page.screenshot({path:path.join(folder,engine+'-'+name+'-settings.png'),fullPage:true});
+     await nav('lookup').click();
+     await page.screenshot({path:path.join(folder,engine+'-'+name+'-lookup.png'),fullPage:true});
+     await nav('settings').click();
+     await page.screenshot({path:path.join(folder,engine+'-'+name+'-settings.png'),fullPage:true});
      assert.deepEqual(errs,[],'uncaught errors on '+engine+' '+name);
      await context.close();
      console.log(engine+' '+name+' passes: modal, form, edit, reload, settings, search, update and no overflow');
