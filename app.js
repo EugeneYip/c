@@ -2,13 +2,13 @@
 (function(){
 "use strict";
 const R=window.CardRules,$=id=>document.getElementById(id),KEY="cardfox-v2",OLD="card-c-2026-v1";
-const def=()=>({level:1,cards:{richart:true,line:true,air:true},lineLinked:false,lineBonus:false,lineBonusUsed:0,birthdayMonth:0,mileValue:.4,lineValue:1,fee:1.5,bonusCapReached:false});
+const def=()=>({level:1,cards:{richart:true,line:true,air:true},lineLinked:true,lineBonus:false,lineBonusUsed:0,birthdayMonth:5,mileValue:.4,lineValue:1,fee:1.5,bonusCapReached:false});
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const num=n=>Number(n||0).toLocaleString("zh-TW",{maximumFractionDigits:2});
 function taiwanToday(){const a=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Taipei",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),v=k=>a.find(x=>x.type===k).value;return v("year")+"-"+v("month")+"-"+v("day")}
 const fresh=()=>({date:taiwanToday(),settings:def(),entries:{},favorites:["7-ELEVEN","全家","50嵐","momo","一般餐廳"],holidays:{}});
 let monthlyIpass=0;
-const QUICK_SHOPS=["高鐵","臺北捷運","家樂福","全聯福利中心","大全聯","臺鐵","momo","7-ELEVEN"];
+const QUICK_SHOPS=["蝦皮","寶雅","高鐵","臺北捷運","家樂福","全聯福利中心","大全聯","臺鐵","momo","7-ELEVEN","全家","50嵐"];
 let state=fresh(),editing=null,mode="rich",rankExpanded=false,timer;
 function safe(x){const amount=Number(x?.amount),store=String(x?.store||"").trim().slice(0,70);if(!store||!Number.isFinite(amount)||amount<=0||amount>1e9)return null;return {id:String(x.id||("tx"+Date.now()+Math.random().toString(36).slice(2,8))),store,amount:Math.round(amount*100)/100,category:R.CATEGORIES[x.category]?x.category:"auto",method:R.PAYMENTS[x.method]?x.method:"card",region:["tw","abroad","abroadonline","europe"].includes(x.region)?x.region:"tw",airDouble:!!x.airDouble};}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{toast("此瀏覽器未允許記錄儲存。")}}
@@ -106,7 +106,7 @@ function lookup(){
 }
 const settingsIds={level:"level","bonus-cap":"bonusCapReached","line-linked":"lineLinked","line-bonus":"lineBonus","line-used":"lineBonusUsed","birth-month":"birthdayMonth","mile-value":"mileValue","line-value":"lineValue","foreign-fee":"fee"};
 function settings(){for(const [id,key] of Object.entries(settingsIds)){const x=$(id);if(x.type==="checkbox")x.checked=!!state.settings[key];else x.value=state.settings[key]}$("card-line").checked=!!state.settings.cards.line;$("card-air").checked=!!state.settings.cards.air;$("holiday").checked=!!state.holidays[state.date];favorites()}
-function settingChange(e){const {id,type,checked,value}=e.target;if(id==="card-line")state.settings.cards.line=checked;else if(id==="card-air")state.settings.cards.air=checked;else if(id==="holiday")state.holidays[state.date]=checked;else if(settingsIds[id])state.settings[settingsIds[id]]=type==="checkbox"?checked:id==="line-used"?Math.min(450,Math.max(0,Number(value)||0)):Math.max(0,Number(value)||0);save();render()}
+function settingChange(e){const {id,type,checked,value}=e.target;if(id==="card-line")state.settings.cards.line=checked;else if(id==="card-air")state.settings.cards.air=checked;else if(id==="holiday")state.holidays[state.date]=checked;else if(settingsIds[id]){const raw=type==="checkbox"?checked:id==="line-used"?Math.min(450,Math.max(0,Number(value)||0)):Math.max(0,Number(value)||0);state.settings[settingsIds[id]]=id==="level"?(Number(value)===2?2:1):id==="birth-month"?Math.min(12,Math.max(0,Math.trunc(Number(value)||0))):raw;}save();render()}
 function init(){
 load();options("entry-payment",R.PAYMENTS);options("lookup-payment",R.PAYMENTS);options("entry-category",R.CATEGORIES);options("lookup-category",R.CATEGORIES);
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.view)));
