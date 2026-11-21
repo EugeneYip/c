@@ -28,7 +28,9 @@ const path=require('node:path');
      page.on('pageerror',e=>errs.push(String(e)));
      await page.goto(url,{waitUntil:'load'});
      assert.match(await page.title(),/刷哪張/);
-     assert.equal(await page.locator('#main-plan').innerText(),'加入消費後試算');
+     assert.equal((await page.locator('#entry-payment').innerText()).includes('Google'),false);
+     assert.equal(await page.locator('#show-all').innerText(),'逐筆選最佳卡');
+     assert.equal(await page.locator('#main-plan').innerText(),'開始記錄消費');
      async function assertNoOverflow(tag){const n=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);assert.ok(n<=1,engine+' '+name+' '+tag+' overflow: '+n)}
      await assertNoOverflow('home');
      // The reported iPhone bug must never silently fail to open a form.
@@ -57,6 +59,11 @@ const path=require('node:path');
      await page.reload({waitUntil:'load'});
      assert.equal(await page.locator('#tx-count').innerText(),'2');
      await assertNoOverflow('with transactions');
+     await page.locator('#show-all').click();
+     assert.equal((await page.locator('#mode-explain').innerText()).includes('每筆擇一張'),true);
+     await page.locator('#expand-rank').click();
+     assert.equal(await page.locator('.rank-row.is-collapsed').count(),0);
+     await page.locator('#show-rich').click();
      const nav=view=>page.locator((width<=390?'.bottom-tabs ':'.top-tabs ')+'[data-view='+view+']');
      await nav('settings').click();
      assert.equal(await page.locator('#panel-settings').isVisible(),true);
@@ -75,8 +82,8 @@ const path=require('node:path');
      await assertNoOverflow('lookup');
      // Update checking must be a genuine, same-origin request.
      await page.locator('#check-update').click();
-     await page.locator('#update-status').getByText(/已是最新版本/).waitFor();
-     await page.route('**/version.json?*',route=>route.fulfill({status:200,contentType:'application/json',body:'{"version":"2.2.0"}'}));
+     await page.locator('#update-status').getByText(/已是最新版/).waitFor();
+     await page.route('**/version.json?*',route=>route.fulfill({status:200,contentType:'application/json',body:'{"version":"2.3.0"}'}));
      await page.locator('#check-update').click();
      await page.locator('#update-banner').waitFor({state:'visible'});
      await assertNoOverflow('update banner');
