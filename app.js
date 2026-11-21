@@ -128,6 +128,7 @@ $("lookup-result").addEventListener("input",e=>{if(e.target.id==="metro-monthly"
 $("lookup-add").onclick=()=>{const tx=lookupTx();if(!tx){toast("請輸入有效消費金額");return}setRows(rows().concat(tx));render();go("today");toast("已加入當日消費")};
 $("manage-favorites").onclick=e=>{const b=e.target.closest("[data-favorite]");if(b)favorite(b.dataset.favorite)};
 for(const id of [...Object.keys(settingsIds),"card-line","card-air","holiday"])$(id).onchange=settingChange;
+$("apply-primary-defaults").onclick=()=>{if(confirm("套用主要使用者的預設資格？這會取代目前的個人設定，但不影響已記錄消費、收藏及日期。請確認 LEVEL、LINE Pay 綁定與生日月份符合持卡人實際情況。")){state.settings=def();save();settings();render();toast("已套用主要使用者預設")}};
 $("reset-preferences").onclick=()=>{if(confirm("還原個人設定？交易記錄不受影響。")){state.settings=def();state.holidays={};save();settings();render();toast("已還原預設")}};
 $("erase-all").onclick=()=>{if(confirm("刪除本裝置所有消費、收藏和設定？無法復原。")){try{localStorage.removeItem(KEY);localStorage.removeItem(OLD)}catch{}state=fresh();save();settings();render();go("today");toast("已清除所有資料")}};
 render();settings();
