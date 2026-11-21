@@ -67,6 +67,8 @@ test('LINE registered additional 2.2%, event balance 450',()=>{
 test('China Airlines business signature normal / 2x / birthday 3x',()=>{
  assert.equal(R.air(tx('一般店',600),config()).points,20);
  assert.equal(R.air(tx('華航',600,'travel','card','tw',{airDouble:true}),config()).points,40);
+ assert.equal(R.air(tx('一般海外商店',600,'general','card','abroad'),config()).points,40);
+ assert.equal(R.air(tx('德國商店',600,'general','card','europe'),config()).points,0);
  assert.equal(R.air(tx('海外店',600,'general','card','abroad'),config({birthdayMonth:11})).points,60);
 });
 test('2027 unknown CTBC policies not modeled as zero-return options',()=>{
