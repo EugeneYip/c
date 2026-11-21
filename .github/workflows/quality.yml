@@ -36,3 +36,18 @@ jobs:
           path: tests/artifacts/
           if-no-files-found: ignore
           retention-days: 7
+
+      - name: Upload inspectable source for QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cardfox-source-qa
+          path: |
+            index.html
+            styles.css
+            rules.js
+            app.js
+            favicon.svg
+            tests/*.cjs
+          if-no-files-found: error
+          retention-days: 3
