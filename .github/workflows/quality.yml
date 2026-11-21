@@ -24,11 +24,12 @@ jobs:
           node --check tests/browser.test.cjs
           node --check tests/engine.test.cjs
           node --check tests/benefits.test.cjs
+          node --check tests/merchant-v24.test.cjs
           python -m json.tool data/benefits.json > /dev/null
           python -m json.tool data/check-status.json > /dev/null
           python scripts/check_benefits.py --self-test
       - name: Reward calculation tests
-        run: node --test tests/rules.test.cjs tests/engine.test.cjs tests/benefits.test.cjs
+        run: node --test tests/rules.test.cjs tests/engine.test.cjs tests/benefits.test.cjs tests/merchant-v24.test.cjs
       - name: Install browser test dependency
         run: |
           npm install --no-audit --no-fund --no-save playwright@1.56.1
@@ -57,6 +58,7 @@ jobs:
             tight-v22.css
             rights.css
             benefits.js
+            tests/merchant-v24.test.cjs
             data/benefits.json
             data/check-status.json
             app.js

@@ -5,6 +5,7 @@ const REMOTE="https://raw.githubusercontent.com/EugeneYip/c/main/data/check-stat
 const NAMES={richart:"台新 Richart",line:"中信 LINE Pay",air:"中信華航商務御璽"};
 const COVER={auto:"已納入基本試算",partial:"部分納入試算",reference:"僅提供權益資訊"};
 let data=null,feed=null,chosen="richart",all=false,busy=false;
+const TYPE_ORDER={"回饋":0,"限時":1,"商家優惠":2,"旅行福利":3,"卡片福利":4,"點數":5,"資格":6,"保險":7,"新戶":8};
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function uri(u){try{let v=new URL(u);return v.protocol==="https:"?v.toString():"#"}catch{return "#"}}
 function dateTW(){let p=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Taipei",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),q=k=>p.find(x=>x.type===k).value;return q("year")+"-"+q("month")+"-"+q("day")}
@@ -17,7 +18,7 @@ function renderOffers(){
  $("benefits-filter").innerHTML=filters.map(x=>'<button type="button" data-card="'+x[0]+'" aria-pressed="'+String(chosen===x[0])+'" class="'+(chosen===x[0]?"selected":"")+'">'+x[1]+'</button>').join("");
  let today=dateTW(),src=Object.fromEntries(data.sources.map(s=>[s.id,s]));
  let list=data.offers.filter(o=>chosen==="all"||chosen===o.card).sort((a,b)=>{
-   const status=x=>today<x.start?1:today>x.end?2:0;return status(a)-status(b)||a.title.localeCompare(b.title,"zh-TW");
+   const status=x=>today<x.start?1:today>x.end?2:0;return status(a)-status(b)||(TYPE_ORDER[a.kind]??10)-(TYPE_ORDER[b.kind]??10)||a.title.localeCompare(b.title,"zh-TW");
  });
  const visible=all?list:list.slice(0,8);
  $("benefit-count").textContent=list.length+" 項整理權益；非全部銀行促銷";
@@ -31,16 +32,17 @@ function renderOffers(){
 function label(s){return ({unchanged:"與既有機器比對基準一致",changed:"疑似公告內容變動，待人工核對",baseline:"已建立機器基準，非人工核對",error:"本次無法讀取官方網站",pending:"尚無自動監測紀錄"})[s]||"監測狀態未確認"}
 function statusView(info,source){
  feed=info;
+ const readTime=timeTW(new Date().toISOString());
  const sources=data.sources,byId=Object.fromEntries((info.sources||[]).map(x=>[x.id,x]));
  let checked=Date.parse(info.checkedAt||""),old=!Number.isFinite(checked)||Date.now()-checked>48*3600000||checked>Date.now()+3600000;
  let changed=(info.sources||[]).some(x=>x.status==="changed"),error=(info.sources||[]).some(x=>x.status==="error");
  let head=changed?"發現疑似官方公告變更":error?"部分銀行資料無法比對":old?"資料尚未建立或已過期":"已取得官方公告比對紀錄";
- $("benefit-check-summary").innerHTML="<strong>"+head+"</strong><p>最近自動比對："+esc(timeTW(info.checkedAt))+"</p><p>"+(changed?"有來源與既有機器基準不同。需重新核對官方條款後，才能修改計算規則。":old?"尚不能確認目前條款有無變化。":"機器比對僅確認來源文字有無變化，不能保證活動適用資格。")+"</p>";
+ $("benefit-check-summary").innerHTML="<strong>"+head+"</strong><p>本次讀取監測紀錄："+esc(readTime)+"</p><p>銀行官方頁面最近掃描："+esc(timeTW(info.checkedAt))+"</p><p>"+(changed?"有來源與既有機器基準不同。需重新核對官方條款後，才能修改計算規則。":old?"尚不能確認目前條款有無變化。":"機器比對僅確認來源文字有無變化，不能保證活動適用資格。")+"</p>";
  $("benefit-check-list").innerHTML=sources.map(src=>{
   let s=byId[src.id],diff=s?.status==="changed"&&s.diff?(s.diff.added||[]).slice(0,3).map(t=>"<p><b>疑似新增：</b>"+esc(t)+"</p>").join("")+(s.diff.removed||[]).slice(0,2).map(t=>"<p><b>疑似移除：</b>"+esc(t)+"</p>").join(""):"";
   return '<div class="source-row"><div><b>'+esc(src.name)+'</b><p>'+esc(label(s?.status))+'</p>'+(s?.lastSuccessAt?"<small>最近成功擷取："+esc(timeTW(s.lastSuccessAt))+"</small>":"")+(diff?'<details><summary>查看疑似變更內容</summary>'+diff+'<p>文字差異不等於已審核的新回饋。</p></details>':"")+'</div><a href="'+uri(src.url)+'" target="_blank" rel="noopener noreferrer">官方頁面</a></div>';
  }).join("");
- $("check-source-note").textContent=source==="github"?"讀取 GitHub 公開儲存庫的監測紀錄，不含私人信用卡資料。":"讀取本站備援紀錄，可能晚於最新監測。";
+ $("check-source-note").textContent=source==="github"?"已重新下載 GitHub 公開監測紀錄；非即時掃描銀行官網，亦不含私人信用卡資料。":"GitHub 即時監測紀錄讀取失敗，改用本站備援；可能不是最新掃描結果。";
 }
 async function render(){
  try{await getData();renderOffers()}
@@ -49,7 +51,7 @@ async function render(){
 async function check(){
  if(busy)return;busy=true;
  let btn=$("check-update"),b2=$("benefits-refresh");btn.disabled=true;b2.disabled=true;
- $("benefit-check-summary").textContent="正在讀取銀行公告監測紀錄…";
+ $("benefit-check-summary").textContent="正在重新下載監測紀錄（不會觸發銀行官網掃描）…";
  try{
   await getData();renderOffers();
   let report,origin="github";
@@ -65,7 +67,7 @@ function init(){
  $("benefits-filter").addEventListener("click",e=>{let b=e.target.closest("[data-card]");if(!b)return;chosen=b.dataset.card;all=false;renderOffers()});
  $("benefits-more").addEventListener("click",()=>{all=!all;renderOffers()});
  $("benefits-refresh").addEventListener("click",check);
- $("check-update").addEventListener("click",()=>{if(entry)entry.click();check()});
+ $("check-update").addEventListener("click",()=>{if(entry)entry.click();check();const summary=$("benefit-check-summary");if(summary&&typeof summary.scrollIntoView==="function")summary.scrollIntoView({behavior:"smooth",block:"start"})});
 }
 init();window.CardBenefitCenter={render,check};
 })();

@@ -4,11 +4,17 @@
 const SOURCES={richart:"https://mkp.taishinbank.com.tw/s/2025/RichartCard_2025/index.html",line:"https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/notice.html",travel:"https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/page_travel.html",air:"https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/feature.html"};
 const PLANS=[["daily","天天刷"],["large","大筆刷"],["food","好饗刷"],["digital","數趣刷"],["travel","玩旅刷"],["pay","Pay著刷"],["holiday","假日刷"],["chill","Chill刷"]];
 const CARDS={richart:"台新 Richart",line:"中信 LINE Pay",air:"中信華航"};
-const PAYMENTS={card:"實體卡／網路刷卡",apple:"Apple／Google Pay",taishin:"台新Pay／TWQR",plus:"台新Pay+",linepay:"LINE Pay",full:"全盈+Pay",other:"其他電子支付"};
+const PAYMENTS={ipass:"中信 LINE Pay 一卡通（搭車）",easycard:"悠遊卡／自動加值",pxpay:"PX Pay／全支付",card:"實體卡／網路刷卡",apple:"Apple／Google Pay",taishin:"台新Pay／TWQR",plus:"台新Pay+",linepay:"LINE Pay",full:"全盈+Pay",other:"其他電子支付"};
 const CATEGORIES={auto:"自動辨識",general:"一般消費",food:"餐飲（MCC 需確認）",daily:"日常／交通",large:"百貨／居家",digital:"網購／數位",travel:"旅遊／機票",insurance:"保費",convenience:"便利商店",excluded:"排除交易"};
 const catalog=[];
 function add(names,group,chill=0) {for(const record of names.split("|")){const aliases=record.split("~").map(x=>x.trim()).filter(Boolean);if(aliases.length)catalog.push({name:aliases[0],aliases,group,chill});}}
 add("7-ELEVEN~7-11~統一超商|全家~FamilyMart","convenience");
+// Supermarkets: named exclusions apply to all three primary rewards calculations.
+add("全聯福利中心~全聯~PX Mart~PXMart|大全聯~大潤發~PX Mart Plus|PXGo!~PX Go","excluded");
+// Transit: do not conflate contactless bank card taps with LINE Pay card's iPASS monthly rewards.
+add("臺北捷運~台北捷運~北捷~Taipei MRT~捷運~MRT","transit");
+add("高鐵~臺灣高鐵~台灣高鐵~T-EX~THSR~高速鐵路|臺鐵~台鐵~台灣鐵路~臺灣鐵路~台鐵e訂通","daily");
+add("家樂福~Carrefour~萬家福~樂家康","daily");
 add("50嵐|得正|五桐號|龜記|UG TEA|叮哥茶飲|CAFE!N|%Arabica|COMPOSE COFFEE","food",10);
 add("詹記麻辣火鍋|萬客什鍋|海底撈|屋馬燒肉|茶六燒肉堂|新村站著吃|燒肉政宗|碳佐麻里|雞湯大叔|貳樓|樂子 the Diner|CAFE ACME|Draft Land|臺虎精釀","food",10);
 add("饗饗|NAGOMI","food",5);
@@ -29,7 +35,7 @@ function merchants(query,limit=10){
  const q=norm(query);if(!q)return catalog.slice(0,limit);
  return catalog.map(m=>({m,score:Math.max(...m.aliases.map(a=>{const v=norm(a);return q===v?4:(v.length>=4||/[\u3400-\u9fff]/.test(v))&&q.startsWith(v)?2:0;}))})).filter(x=>x.score).sort((a,b)=>b.score-a.score||a.m.name.localeCompare(b.m.name,"zh-TW")).slice(0,limit).map(x=>x.m);
 }
-function identify(tx){const m=tx.category==="auto"?merchants(tx.store,1)[0]:null;return {group:m?m.group:(tx.category==="auto"?"general":tx.category),merchant:m,assumed:!m&&tx.category!=="auto"};}
+function identify(tx){const recognized=merchants(tx.store,1)[0];if(recognized&&["excluded","transit"].includes(recognized.group))return {group:recognized.group,merchant:recognized,assumed:false};const m=tx.category==="auto"?recognized:null;return {group:m?m.group:(tx.category==="auto"?"general":tx.category),merchant:m,assumed:!m&&tx.category!=="auto"};}
 const valid=(d,start,end)=>/^\d{4}-\d{2}-\d{2}$/.test(d||"")&&d>=start&&d<=end;
 function weekend(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d||""))return false;const [y,m,day]=d.split("-").map(Number);return [0,6].includes(new Date(Date.UTC(y,m-1,day)).getUTCDay());}
 const floorPoints=(amt,rate)=>Math.floor(amt*rate/100+1e-8);
@@ -43,7 +49,8 @@ function rich(tx,plan,s){
  if(s.cards?.richart===false||!valid(s.date,"2026-07-01","2027-12-31"))return null;
  const {group,merchant,assumed}=identify(tx),level2=Number(s.level)===2,normal=["card","apple"].includes(tx.method)||(tx.method==="taishin"&&tx.region==="tw")||(tx.method==="plus"&&tx.region!=="tw"),wallet=["linepay","full"].includes(tx.method),hol=weekend(s.date)||!!s.confirmedHoliday;
  let rate=.3,reason="一般消費",uncertain=assumed||!merchant;
- if(group==="excluded"){rate=0;reason="可能不回饋的交易";uncertain=true;}
+ if(group==="excluded"){rate=0;reason="一般信用卡回饋排除；全聯限定滿額活動另計";uncertain=true;}
+ else if(group==="transit"){rate=0;reason="捷運感應乘車是否享卡片回饋待核對；常客回饋不適用信用卡感應";uncertain=true;}
  else if(group==="insurance"){rate=1.3;reason="一般保費一次付清（特殊險種例外）";uncertain=true;if(plan==="holiday"&&hol&&(normal||wallet)){rate=level2?2:1.3;reason="假日刷保費（需符合條件）";}}
  else if(group==="convenience"){
   rate=0;reason="超商一般回饋排除";
@@ -59,7 +66,9 @@ function rich(tx,plan,s){
  }else if(normal&&((plan==="food"&&group==="food")||(plan==="daily"&&group==="daily")||(plan==="large"&&group==="large")||(plan==="digital"&&group==="digital")||(plan==="travel"&&(group==="travel"||tx.region!=="tw")))){
   rate=level2?3.3:1.3;reason=assumed?"依自選類別估算；須核對商店 MCC":"指定通路";
  }
- if(group!=="convenience"&&group!=="excluded"&&group!=="insurance"&&tx.method==="other"){rate=.3;reason="第三方支付不適用指定加碼";uncertain=true;}
+ if(group!=="convenience"&&group!=="excluded"&&group!=="insurance"&&group!=="transit"&&tx.method==="other"){rate=.3;reason="第三方支付不適用指定加碼";uncertain=true;}
+ if(merchant&&["高鐵","臺鐵"].includes(merchant.name)&&tx.method==="taishin"){rate=0;reason="車票購買尚未核實支援台新Pay/TWQR；請改選信用卡官方購票通路";uncertain=true;}
+ if(["ipass","easycard","pxpay"].includes(tx.method)){rate=0;reason="電子票證／全聯支付非直接信用卡一般消費，特殊活動另計";uncertain=true;}
  if(s.bonusCapReached&&rate>.3&&group!=="insurance"){rate=group==="convenience"?0:.3;reason="已勾選用盡本期加碼消費額度";uncertain=true;}
  return output("richart",floorPoints(tx.amount,rate),rate,reason,tx,s,{uncertain,source:SOURCES.richart});
 }
@@ -67,13 +76,13 @@ function line(tx,s,used=0){
  if(s.cards?.line===false||!s.lineLinked||!valid(s.date,"2026-07-01","2026-12-31"))return null;
  const {group}=identify(tx),physical=["card","apple"].includes(tx.method)&&tx.region==="abroad";
  if(tx.region==="europe")return output("line",0,0,"中信列示之指定歐洲國家實體交易不回饋",tx,s,{uncertain:false,extra:0,source:SOURCES.line});
- if(group==="excluded")return output("line",0,0,"保守以不回饋估算",tx,s,{uncertain:true,extra:0});
+ if(group==="excluded"||group==="transit")return output("line",0,0,group==="transit"?"捷運信用卡感應回饋未核實；一卡通另按月累計":"全聯等一般不回饋通路",tx,s,{uncertain:true,extra:0});
  const rate=physical?2.8:1,base=roundPoints(tx.amount,rate),extra=(physical&&s.lineBonus&&valid(s.date,"2026-10-01","2026-12-31"))?Math.min(Math.max(0,450-used),roundPoints(tx.amount,2.2)):0;
  return output("line",base+extra,rate+(extra?2.2:0),physical?"海外實體一般回饋"+(extra?"＋已登錄額外加碼":""):"一般消費",tx,s,{extra,uncertain:["convenience","insurance"].includes(group)||!!extra,source:extra?SOURCES.travel:SOURCES.line});
 }
 function air(tx,s){
  if(s.cards?.air===false||!valid(s.date,"2026-01-01","2026-12-31"))return null;
- const {group}=identify(tx);if(group==="excluded")return output("air",0,0,"保守以不回饋估算",tx,s,{uncertain:true});
+ const {group}=identify(tx);if(group==="excluded"||group==="transit")return output("air",0,0,"此通路不計入一般哩程試算",tx,s,{uncertain:true});
  if(tx.region==="europe")return output("air",0,0,"指定歐洲地區實體交易不回饋（商務御璽卡）",tx,s,{uncertain:false,source:SOURCES.air});
  const physical=["card","apple"].includes(tx.method)&&tx.region==="abroad",birthday=Number(s.birthdayMonth)>0&&Number(s.birthdayMonth)===Number(s.date.slice(5,7));
  const mult=physical&&birthday?3:(physical||tx.airDouble)?2:1,points=Math.floor(tx.amount/30+1e-8)*mult;

@@ -1,4 +1,4 @@
-/* CardFox v2.2 — local-first responsive UI */
+/* CardFox v2.4 — local-first responsive UI */
 (function(){
 "use strict";
 const R=window.CardRules,$=id=>document.getElementById(id),KEY="cardfox-v2",OLD="card-c-2026-v1";
@@ -7,6 +7,8 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const num=n=>Number(n||0).toLocaleString("zh-TW",{maximumFractionDigits:2});
 function taiwanToday(){const a=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Taipei",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),v=k=>a.find(x=>x.type===k).value;return v("year")+"-"+v("month")+"-"+v("day")}
 const fresh=()=>({date:taiwanToday(),settings:def(),entries:{},favorites:["7-ELEVEN","全家","50嵐","momo","一般餐廳"],holidays:{}});
+let monthlyIpass=0;
+const QUICK_SHOPS=["高鐵","臺北捷運","家樂福","全聯福利中心","大全聯","臺鐵","momo","7-ELEVEN"];
 let state=fresh(),editing=null,mode="rich",rankExpanded=false,timer;
 function safe(x){const amount=Number(x?.amount),store=String(x?.store||"").trim().slice(0,70);if(!store||!Number.isFinite(amount)||amount<=0||amount>1e9)return null;return {id:String(x.id||("tx"+Date.now()+Math.random().toString(36).slice(2,8))),store,amount:Math.round(amount*100)/100,category:R.CATEGORIES[x.category]?x.category:"auto",method:R.PAYMENTS[x.method]?x.method:"card",region:["tw","abroad","abroadonline","europe"].includes(x.region)?x.region:"tw",airDouble:!!x.airDouble};}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{toast("此瀏覽器未允許記錄儲存。")}}
@@ -72,21 +74,34 @@ function close(){const d=$("entry-dialog");if(d.close&&d.open)d.close();else d.r
 function editSave(e){e.preventDefault();const x=safe({id:editing||undefined,store:$("entry-store").value,amount:$("entry-amount").value,method:$("entry-payment").value,category:$("entry-category").value,region:$("entry-region").value,airDouble:$("air-double").checked});if(!x){toast("請填寫有效店家及金額");return}const a=rows().slice(),i=a.findIndex(e=>e.id===editing);if(i>=0)a[i]=x;else a.push(x);setRows(a);close();render();toast(i>=0?"已更新消費":"已加入消費")}
 function lookupTx(){return safe({store:$("lookup-search").value.trim()||"一般消費",amount:$("lookup-amount").value,category:$("lookup-category").value,method:$("lookup-payment").value,region:$("lookup-region").value})}
 function favButtons(manage){return state.favorites.map(x=>'<button type="button" data-favorite="'+esc(x)+'">'+esc(x)+(manage?" ×":"")+"</button>").join("")}
-function favorites(){$("favorites").innerHTML=favButtons(false);$("manage-favorites").innerHTML=favButtons(true)||'<span class="micro">尚無常用店家</span>'}
+function favorites(){$("favorites").innerHTML=favButtons(false);$("manage-favorites").innerHTML=favButtons(true)||'<span class="micro">尚無常用店家</span>';$("popular-shops").innerHTML=QUICK_SHOPS.map(name=>'<button type="button" data-quick="'+esc(name)+'">'+esc(name)+'</button>').join("")}
 function favorite(name){if(!name)return;const at=state.favorites.indexOf(name);if(at>=0)state.favorites.splice(at,1);else if(state.favorites.length<25)state.favorites.push(name);else{toast("最多可加入 25 個店家");return}save();lookup();favorites()}
 function lookup(){
  favorites();const term=$("lookup-search").value.trim();$("lookup-suggestions").innerHTML=suggestions(term);const out=$("lookup-result");
- if(!term){out.innerHTML='<p class="muted small">輸入商家或點選常用店家，即可查看選卡建議。</p>';return}
+ if(!term){out.innerHTML='<p class="muted small">搜尋高鐵、捷運、量販、網購等；先點快速通路，或輸入商家名稱。</p>';return}
  const tx=lookupTx();if(!tx){out.textContent='請輸入有效試算金額。';return}
- const info=R.identify(tx),c=cfg();
- const rank=R.PLANS.map(([key,label])=>({key,label,score:R.rich(tx,key,c)})).filter(x=>x.score).sort((a,b)=>b.score.points-a.score.points);
- const richBest=rank[0];const choices=R.cardOptions(tx,richBest?.key||'daily',c,Number(c.lineBonusUsed)||0);
- const best=choices[0];const others=choices.filter(x=>x.card!==best?.card);
- out.innerHTML='<div class="lookup-result-head"><strong>'+esc(info.merchant?.name||tx.store)+'</strong><p>'+(info.merchant?'已收錄店家名稱，仍須核對分店及請款類別':info.assumed?'依自選通路類別估算，仍需確認 MCC':'未收錄官方通路，先以一般消費估算')+'</p></div>'+
- (best?'<div class="result-choice"><div>'+cardTag(best)+'<div class="details">'+(best.card==='richart'?'切換 '+esc(richBest?.label||'未核對')+' · ':'')+esc(best.howToPay)+(best.paymentChange?'（需換付款方式）':'')+'</div></div><b>估值 NT$ '+num(best.value)+'</b></div>':'<p class="muted small">沒有已核對的有效方案可比較。</p>')+
- (best?.card==='richart'?'':'<div class="result-choice"><div><span class="chip orange">Richart 最佳切換</span><div class="details">'+esc(richBest?.label||'未核對')+'</div></div><b>'+num(richBest?.score.points||0)+' 點</b></div>')+
- others.map(x=>'<div class="result-choice"><div>'+cardTag(x)+'<div class="details">'+esc(x.howToPay)+'</div></div><b>NT$ '+num(x.value)+'</b></div>').join('')+
- '<p class="micro">以上以單筆回饋估算；若今日還有其他消費，Richart 全日最佳方案可能改變。'+(best?.paymentChange?'更換信用卡時請確認店家可直接刷卡。':'')+'</p>'+
+ const info=R.identify(tx),c=cfg(),g=info.group;
+ const ranking=R.PLANS.map(([key,label])=>({key,label,score:R.rich(tx,key,c)})).filter(x=>x.score).sort((a,b)=>b.score.points-a.score.points);
+ const richBest=ranking[0],options=R.cardOptions(tx,richBest?.key||'daily',c,Number(c.lineBonusUsed)||0);
+ const best=options[0],others=options.filter(x=>x.card!==best?.card);
+ let notice='';
+ const extra=(label,text,url)=>'<div class="merchant-advice"><b>'+esc(label)+'</b><p>'+esc(text)+'</p>'+(url?'<a href="'+url+'" target="_blank" rel="noopener noreferrer">查看官方條款</a>':'')+'</div>';
+ if(g==='transit'){
+  notice+=extra('信用卡感應與一卡通是不同的付款方式','2026/7/1 起北捷支援實體信用卡及 Apple Pay 感應進站，但信用卡感應不享北捷常客優惠；中信 LINE Pay 卡的一卡通功能則可依當月合格大眾運輸累計消費每滿 NT$100 回饋 1 點。不可以每次乘車四捨五入算 1%。','https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/index.html');
+  notice+='<div class="merchant-transport"><label for="metro-monthly">本月已搭乘合格一卡通交通金額（選填）</label><div class="transport-calc"><input id="metro-monthly" type="number" min="0" step="1" inputmode="numeric" value="'+esc(monthlyIpass||'')+'" placeholder="例如：850"><span id="metro-estimate">'+(monthlyIpass?'估算 '+Math.floor(monthlyIpass/100)+' 點':'依月累計，每滿 NT$100 為 1 點')+'</span></div><p class="micro">不含高鐵；此為當月合格一卡通交通支出的估算，不加入單筆刷卡排名。</p></div>';
+ } else if(g==='excluded'&&/全聯|PX|大潤發/i.test(tx.store)){
+  notice+=extra('全聯／大全聯一般回饋排除','三張卡的基本回饋均不應直接套用於全聯及大全聯。台新 2026/10/30–12/3 的指定活動，限全聯實體門市（不含大全聯）且僅週六、週日，單筆滿 NT$1,300 並以指定 PX Pay／台新Pay／全支付支付，需符合限量及會員資格；不自動加進比較。','https://mkpcard.taishinbank.com.tw/tscccms/promotion/detail/WM_20260907090737422');
+ } else if(/高鐵|T-EX|THSR|高速鐵路/i.test(tx.store)){
+  notice+=extra('高鐵指定購票通路','台新 Richart「天天刷」符合資格最高 3.3%；須透過高鐵官方網站、T-EX App、車站售票窗口或自動售票機等合格通路完成購票。使用臺灣發行、以新臺幣請款的適格交易；通路及實際請款仍以銀行認列為準。','https://mkpcard.taishinbank.com.tw/tscccms/promotion/detail/WM_20251230190143055');
+ } else if(/家樂福|Carrefour|萬家福|樂家康/i.test(tx.store)){
+  notice+=extra('量販店名稱及請款認列','家樂福及相關更名通路見於 Richart 天天刷的官方公告。不同網路購物、專櫃或更名後請款資訊仍可能影響指定回饋，建議先核對實際刷卡商店名稱。','https://mobile.richart.tw/TSDIB_RichartWeb/card/credit-card');
+ }
+ const noBasic=['excluded','transit'].includes(g);
+ out.innerHTML='<div class="lookup-result-head"><strong>'+esc(info.merchant?.name||tx.store)+'</strong><p>'+(info.merchant?'已收錄店家名稱，仍須核對分店及請款類別':info.assumed?'依自選通路類別估算，仍需確認 MCC':'尚無指定通路比對，先以一般消費保守試算')+'</p></div>'+notice+
+ (noBasic?'<div class="result-choice"><div><strong>一般刷卡回饋暫不計算</strong><div class="details">需核對特約活動或電子票證累計規則；勿直接套用一般回饋率。</div></div><b>—</b></div>':(best?'<div class="result-choice"><div>'+cardTag(best)+'<div class="details">'+(best.card==='richart'?'切換 '+esc(richBest?.label||'未核對')+' · ':'')+esc(best.howToPay)+(best.paymentChange?'（需更換付款方式）':'')+'</div></div><b>估值 NT$ '+num(best.value)+'</b></div>':'<p class="muted small">指定日期沒有已核對的有效回饋。</p>'))+
+ (noBasic?'':(best?.card==='richart'?'':'<div class="result-choice"><div><span class="chip orange">Richart 最佳切換</span><div class="details">'+esc(richBest?.label||'未核對')+'</div></div><b>'+num(richBest?.score.points||0)+' 點</b></div>'))+
+ (noBasic?[]:others).map(x=>'<div class="result-choice"><div>'+cardTag(x)+'<div class="details">'+esc(x.howToPay)+'</div></div><b>估值 NT$ '+num(x.value)+'</b></div>').join('')+
+ '<p class="micro">這是單筆估算；Richart 全日最佳方案須合併當日交易決定。'+(best?.paymentChange?'更換信用卡時須確認店家接受該付款方式。':'')+(g==='transit'?'感應進站與儲值票卡的優惠不可混為一談。':'')+'</p>'+
  '<button type="button" class="lightbtn" id="toggle-favorite" style="margin-top:12px">'+(state.favorites.includes(term)?'從常用店家移除':'☆ 加入常用店家')+'</button>';
 }
 const settingsIds={level:"level","bonus-cap":"bonusCapReached","line-linked":"lineLinked","line-bonus":"lineBonus","line-used":"lineBonusUsed","birth-month":"birthdayMonth","mile-value":"mileValue","line-value":"lineValue","foreign-fee":"fee"};
@@ -106,8 +121,10 @@ $("entry-store").oninput=e=>$("entry-suggestions").innerHTML=suggestions(e.targe
 $("entry-suggestions").onclick=e=>{const b=e.target.closest("[data-merchant]");if(b){$("entry-store").value=b.dataset.merchant;$("entry-category").value="auto";$("entry-suggestions").innerHTML=""}};
 $("lookup-search").oninput=lookup;["lookup-amount","lookup-payment","lookup-category","lookup-region"].forEach(id=>$(id).onchange=lookup);
 $("lookup-suggestions").onclick=e=>{const b=e.target.closest("[data-merchant]");if(b){$("lookup-search").value=b.dataset.merchant;$("lookup-category").value="auto";lookup()}};
+$("popular-shops").onclick=e=>{const b=e.target.closest("[data-quick]");if(b){$("lookup-search").value=b.dataset.quick;$("lookup-category").value="auto";lookup()}};
 $("favorites").onclick=e=>{const b=e.target.closest("[data-favorite]");if(b){$("lookup-search").value=b.dataset.favorite;$("lookup-category").value="auto";lookup()}};
 $("lookup-result").onclick=e=>{if(e.target.closest("#toggle-favorite"))favorite($("lookup-search").value.trim())};
+$("lookup-result").addEventListener("input",e=>{if(e.target.id==="metro-monthly"){monthlyIpass=Math.max(0,Number(e.target.value)||0);const el=$("metro-estimate");if(el)el.textContent=e.target.value?"估算 "+Math.floor(monthlyIpass/100)+" 點":"依月累計，每滿 NT$100 為 1 點"}});
 $("lookup-add").onclick=()=>{const tx=lookupTx();if(!tx){toast("請輸入有效消費金額");return}setRows(rows().concat(tx));render();go("today");toast("已加入當日消費")};
 $("manage-favorites").onclick=e=>{const b=e.target.closest("[data-favorite]");if(b)favorite(b.dataset.favorite)};
 for(const id of [...Object.keys(settingsIds),"card-line","card-air","holiday"])$(id).onchange=settingChange;

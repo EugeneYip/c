@@ -124,3 +124,22 @@ V2.1 針對手機使用者回報的問題加入以下改善：
 - python scripts/check_benefits.py --self-test
 - node tests/browser.test.cjs（CI 使用 Chromium + WebKit，新增權益頁與監測狀態模擬）
 - 每日來源監測工作流程的失敗或改版資訊見 GitHub Actions > Bank rights monitoring。
+
+
+## V2.4：通路速查、權益優先與監測更新說明（2026-11-21）
+
+- 店家速查新增八個常見通路：高鐵、臺北捷運、家樂福、全聯福利中心、大全聯、臺鐵、momo 與 7-ELEVEN，不影響現有常用店家收藏。新增臺灣高鐵／T-EX／THSR、台北捷運／MRT、家樂福／萬家福／樂家康、全聯／PX Mart 等名稱辨識。
+- 台新 Richart 指定高鐵及臺鐵官方購票通路，符合 LEVEL 2 等條件可在天天刷方案享最高 3.3%；使用悠遊卡及非指定通路不得自動套用最高回饋。T-EX 購票、實體卡與官方規定逐項查核。
+- 臺北捷運信用卡感應乘車與中信 LINE Pay 聯名卡之一卡通交通優惠分開。中信 LINE Pay 一卡通合格大眾交通每月累計滿 NT$100 回饋 1 點，高鐵除外；按月估算而非逐筆四捨五入，不計入即時信用卡排行榜。
+- 全聯、大全聯一般信用卡回饋保守歸零，手動選類別也不能繞過排除。2026/10/30–12/3 台新指定全聯週末滿額活動僅作參考，需符合指定付款方式、店家、金額與限量名額，不能算作一般保證回饋。
+- 家樂福及更名通路萬家福、樂家康，須依簽單名稱判定是否適用 Richart 天天刷。
+- 權益頁先顯示整理的 28 項主要權益與福利，官方監測紀錄移至下方，來源細節收合以免佔用主要閱讀空間。
+- 原「重新檢查」改為「重新讀取監測結果」：每次點擊會不使用快取地讀取 GitHub 公開監測檔案，分別顯示此次讀取與上次銀行實際掃描的時間。此功能**不會立刻重新掃描銀行網站**。儲存庫管理者可由 GitHub Actions 的 Bank rights monitoring 手動執行工作流程；一般使用者可查看結果而不能匿名觸發有寫入權限的排程。
+- 新增 Node 通路測試與 Chromium／WebKit 端對端操作測試，涵蓋店家捷徑、捷運按月點數、全聯排除、權益資料在先、監測狀態變動。
+
+官方參考：
+[台新 Richart 詳細規定](https://www.taishinbank.com.tw/TSB/personal/credit/intro/overview/cg047/card001/)、
+[台新高鐵臺鐵](https://mkpcard.taishinbank.com.tw/tscccms/promotion/detail/WM_20251230190143055)、
+[臺北捷運多元支付](https://www.gov.taipei/News_Content.aspx?n=F0DDAF49B89E9413&s=49BF940AA1B9B9EE)、
+[中信 LINE Pay 一卡通](https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/index.html)、
+[台新全聯週年慶](https://mkpcard.taishinbank.com.tw/tscccms/promotion/detail/WM_20260907090737422)。

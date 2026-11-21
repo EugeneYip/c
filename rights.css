@@ -47,3 +47,17 @@
   .benefits-filter{grid-template-columns:repeat(4,minmax(0,1fr))}
   .benefit-list{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* v2.4: put actionable benefits before machine audit, make merchant shortcuts compact */
+.quick-merchant-row{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;overscroll-behavior-inline:contain;padding:2px 0 9px;scrollbar-width:thin;scroll-snap-type:x proximity}
+.quick-merchant-row button{flex-shrink:0;scroll-snap-align:start;min-height:38px;max-width:190px;padding:7px 12px;border:1px solid #efccad;border-radius:99px;background:#fff0e1;color:#a14b1c;font-size:13px;font-weight:700;white-space:nowrap}
+.merchant-advice{border:1px solid #f1d4af;background:#fff9f0;border-radius:13px;padding:11px 13px;margin:12px 0;font-size:13px;color:#654b39;line-height:1.65}
+.merchant-advice b{font-size:14px;color:#9d501e}.merchant-advice p{margin:5px 0}.merchant-advice a{font-size:12px;font-weight:700}
+.merchant-transport{border:1px solid #dfebe9;border-radius:13px;padding:11px 13px;background:#f3faf8;margin:11px 0}
+.transport-calc{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:center;gap:12px}.transport-calc span{font-size:13px;font-weight:750;color:#306955}
+.merchant-transport label{font-weight:750;font-size:13px}.merchant-transport input{max-width:140px}
+.source-details{margin-top:10px;border-top:1px solid var(--line);padding-top:9px}
+.source-details>summary{cursor:pointer;color:var(--orange-dark);font-size:13px;font-weight:700;min-height:40px;padding:9px 0}
+.rights-inventory{order:0}.rights-check{order:1}
+@media(min-width:690px){.screen#panel-benefits{grid-template-columns:1fr}.benefit-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:370px){.transport-calc{grid-template-columns:95px minmax(0,1fr);gap:8px}.merchant-advice{padding:10px}}
