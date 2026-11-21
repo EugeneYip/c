@@ -79,7 +79,7 @@
       <div class="quicklist"><p class="micro">常用店家，點一下快速查詢</p><div id="favorites" class="chips"></div></div>
     </div><div class="panel">
       <h3 class="mini-title">試算條件</h3>
-      <div class="form-grid"><div><label for="lookup-amount">金額 NT$</label><input id="lookup-amount" type="number" value="300" min="1" step="1" inputmode="numeric"></div><div><label for="lookup-payment">付款方式</label><select id="lookup-payment"></select></div><div><label for="lookup-category">消費類別</label><select id="lookup-category"></select></div><div><label for="lookup-region">消費地區</label><select id="lookup-region"><option value="tw">臺灣</option><option value="abroad">海外實體</option><option value="abroadonline">海外網路</option><option value="europe">歐洲實體</option></select></div></div>
+      <div class="form-grid"><div><label for="lookup-amount">金額 NT$</label><input id="lookup-amount" type="number" value="300" min="1" step="1" inputmode="numeric"></div><div><label for="lookup-payment">付款方式</label><select id="lookup-payment"></select></div><div><label for="lookup-category">消費類別</label><select id="lookup-category"></select></div><div><label for="lookup-region">消費地區</label><select id="lookup-region"><option value="tw">臺灣</option><option value="abroad">海外實體</option><option value="abroadonline">海外網路</option><option value="europe">歐洲指定不回饋地區實體</option></select></div></div>
       <button type="button" id="lookup-add" class="primary block">將此筆加入當天消費</button></div></div>
     <section class="panel" aria-live="polite"><h3 class="mini-title">查詢結果</h3><div id="lookup-result"></div></section>
     <section class="panel"><h3 class="mini-title">關於店家認列</h3><p class="muted">官方列名商家也可能因分店、第三方支付、實際請款名稱或 MCC 不符合而無法獲得加碼。未列名的商家不會自動假設符合高回饋；可自行選擇類別試算，結果會標示「待確認」。</p></section>
@@ -125,7 +125,7 @@
   <div class="sheet-body">
    <label for="entry-store">店家名稱</label><input id="entry-store" type="text" placeholder="例如：50嵐、momo、一般餐廳" autocomplete="off" required maxlength="70">
    <div id="entry-suggestions" class="suggestions"></div>
-   <div class="form-grid"><div><label for="entry-amount">金額 NT$</label><input id="entry-amount" type="number" min="1" step="1" inputmode="numeric" placeholder="0" required></div><div><label for="entry-payment">付款方式</label><select id="entry-payment"></select></div><div><label for="entry-category">消費類別</label><select id="entry-category"></select></div><div><label for="entry-region">消費地區</label><select id="entry-region"><option value="tw">臺灣</option><option value="abroad">海外實體</option><option value="abroadonline">海外網路</option><option value="europe">歐洲實體</option></select></div></div>
+   <div class="form-grid"><div><label for="entry-amount">金額 NT$</label><input id="entry-amount" type="number" min="1" step="1" inputmode="numeric" placeholder="0" required></div><div><label for="entry-payment">付款方式</label><select id="entry-payment"></select></div><div><label for="entry-category">消費類別</label><select id="entry-category"></select></div><div><label for="entry-region">消費地區</label><select id="entry-region"><option value="tw">臺灣</option><option value="abroad">海外實體</option><option value="abroadonline">海外網路</option><option value="europe">歐洲指定不回饋地區實體</option></select></div></div>
    <label class="check"><input id="air-double" type="checkbox"><span>已核對這筆符合華航聯名卡指定交易 2 倍哩程</span></label>
    <p class="micro">自動辨識只適用已收錄商家。一般餐廳需符合銀行認列的餐飲業 MCC。</p>
   </div>
