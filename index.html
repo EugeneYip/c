@@ -1,53 +1,136 @@
 <!doctype html>
-<html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#14233f"><title>刷哪張？｜三卡回饋比較</title>
-<style>:root{font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;color:#14233f;background:#f2f5fa}*{box-sizing:border-box}body{margin:0}header{background:#14233f;color:white;padding:32px 18px}main,header>div{max-width:960px;margin:auto}h1{margin:5px 0;font-size:30px}h2{font-size:20px;margin:0 0 8px}h3{font-size:16px}p{line-height:1.6}header p{color:#d7e2f3}main{padding:18px;display:grid;gap:16px}.panel{background:white;border-radius:16px;padding:20px;box-shadow:0 3px 18px #14233f0a}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wide{grid-column:1/-1}label{font-size:13px;font-weight:650;display:block;margin-bottom:5px}input,select,button{font:inherit}input,select{width:100%;padding:12px;border:1px solid #cdd7e4;border-radius:10px;background:white}input[type=checkbox]{width:auto}button{border:0;border-radius:10px;background:#254f9d;color:white;padding:12px 16px;font-weight:650;cursor:pointer}button.secondary{background:#e8eef7;color:#25436b}button.danger{background:#f9e5e5;color:#9b2929}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.muted{color:#607086;font-size:13px}.note{padding:12px;background:#fff6e2;border-radius:10px;font-size:13px;line-height:1.6}.winner{border:2px solid #6d9bde;background:#f3f8ff;border-radius:12px;padding:16px}.big{font-size:27px;font-weight:800}.row{border-top:1px solid #e4e9f0;padding:13px 0}.row:first-child{border-top:0}.rowhead{display:flex;justify-content:space-between;gap:10px;align-items:center}.tag{display:inline-block;border-radius:30px;padding:3px 9px;background:#e8eef8;font-size:12px;font-weight:700}.rich{background:#d9ebff}.line{background:#d9f6e5}.air{background:#f5e5ff}.right{text-align:right}a{color:#2456a5}footer{padding:15px 0 35px;font-size:13px;color:#5b6d81}@media(max-width:620px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}.panel{padding:16px}h1{font-size:26px}.rowhead{align-items:flex-start}}</style></head>
-<body><header><div><div style="letter-spacing:2px;font-size:12px">TAIWAN CREDIT CARD REWARDS</div><h1>刷哪張？</h1><p>Richart 優先，另外比較中信 LINE Pay 與中信華航聯名卡。以臺灣時間當日消費決定 Richart 切換方案。</p></div></header>
-<main><section class="panel"><h2>一、個人設定</h2><p class="muted">只在這台裝置儲存試算設定，不需登入，也不蒐集卡號。</p><div class="grid">
-<div><label for="date">消費日期（臺灣時間）</label><input id="date" type="date"></div>
-<div><label for="level">Richart 回饋資格</label><select id="level"><option value="1">LEVEL 1</option><option value="2">LEVEL 2（已生效）</option></select></div>
-<div><label for="mile">華航每哩個人估值（NT$）</label><input id="mile" type="number" min="0" step=".05" value=".4"></div>
-<div><label for="fee">海外刷卡手續費假設（%）</label><input id="fee" type="number" min="0" step=".1" value="1.5"></div>
-<div><label for="linevalue">每 LINE POINTS 估值（NT$）</label><input id="linevalue" type="number" min="0" step=".1" value="1"></div>
-<div><label for="priority">同價值時優先使用</label><select id="priority"><option value="richart">台新 Richart</option><option value="line">中信 LINE Pay</option><option value="air">中信華航</option></select></div>
-<div class="wide"><label><input id="linked" type="checkbox"> 中信 LINE Pay 卡已綁定有效臺灣 LINE Pay 帳號</label></div>
-<div class="wide"><label><input id="registered" type="checkbox"> 中信 LINE Pay 海外實體 5% 活動已完成登錄且有剩餘名額／額度</label></div>
-<div><label for="bonusused">上述海外活動已使用加碼點數</label><input id="bonusused" type="number" min="0" value="0"></div>
-<div><label for="coupon">Richart LINE Pay 加碼券</label><select id="coupon"><option value="no">不計入（預設）</option><option value="yes">已領券且符合全部條件</option></select></div>
-</div><p class="note">保守計算：沒有確認資格的活動不自動加碼。LINE POINTS 和華航哩程的價值是個人假設，不代表銀行保證的現金價值。</p></section>
-<section class="panel"><h2>二、加入消費</h2><div class="grid"><div><label for="store">店家／用途</label><input id="store" placeholder="例如：momo、星巴克、一般餐廳"></div><div><label for="amount">金額（新臺幣）</label><input id="amount" type="number" min="1" step="1" placeholder="1000"></div>
-<div><label for="kind">通路類別</label><select id="kind"><option value="general">一般消費</option><option value="daily">日常生活／量販</option><option value="food">指定餐飲</option><option value="digital">指定網購／數位</option><option value="travel">指定旅遊</option><option value="large">指定大筆消費</option><option value="convenience">便利商店</option><option value="excluded">稅費／保費等可能排除項目</option></select></div>
-<div><label for="method">付款方式</label><select id="method"><option value="card">實體卡／直接刷卡</option><option value="apple">Apple Pay／Google Pay</option><option value="linepay">LINE Pay 綁卡</option><option value="taishin">台新 Pay</option><option value="other">其他第三方支付</option></select></div>
-<div><label for="region">消費地點</label><select id="region"><option value="tw">臺灣</option><option value="foreignphysical">海外實體商店</option><option value="foreignonline">海外網路交易</option><option value="europe">歐洲指定排除地區實體商店</option></select></div>
-<div><label for="airbonus">華航聯名卡指定加碼</label><select id="airbonus"><option value="auto">自動／保守判定</option><option value="yes">已確認符合 2 倍</option><option value="no">不適用</option></select></div></div>
-<div class="buttons"><button id="add">加入這筆消費</button><button class="secondary" id="sample">加入示範交易</button><button class="danger" id="clear">清空交易</button></div><div id="items"></div></section>
-<section class="panel"><h2>三、最佳方案與三卡比較</h2><div id="result" class="muted">加入消費後顯示試算結果。</div></section>
-<section class="panel"><h2>資料來源與適用範圍</h2><p class="muted">規則版本：2026-11-20。以官方公開權益為依據，僅支援已核對的期間；未經核實的店家加碼不計入。部分 Richart 指定商家須依官方名單、付款方式與商店請款資料確認。</p><ul><li><a href="https://mkp.taishinbank.com.tw/s/2025/RichartCard_2025/index.html" target="_blank" rel="noopener">台新 Richart 官方權益</a></li><li><a href="https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/notice.html" target="_blank" rel="noopener">中信 LINE Pay 2026 回饋計畫</a></li><li><a href="https://www.ctbcbank.com/twrbo/zh_tw/cc_index/cc_product/cc_introduction_index/C_LINEPay.html" target="_blank" rel="noopener">中信 LINE Pay 卡片資訊</a></li><li><a href="https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/index.html" target="_blank" rel="noopener">中信華航聯名卡</a></li></ul><p class="note">本網站為獨立試算工具，並非銀行官方網站。不保證每筆交易符合回饋，實際權益依銀行認列、當期活動與帳單為準。勿輸入信用卡卡號、驗證碼或身分證字號。</p></section><footer>© 刷哪張？｜Independent rewards comparison</footer></main>
-<script>
-'use strict';
-const $=id=>document.getElementById(id),KEY='card-c-2026-v1',plans=[['daily','天天刷'],['food','好饗刷'],['digital','數趣刷'],['travel','玩旅刷'],['large','大筆刷'],['pay','Pay著刷'],['holiday','假日刷'],['chill','Chill刷']],fmt=n=>Number(n||0).toLocaleString('zh-TW',{maximumFractionDigits:2}),esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let items=[];
-function twdate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
-function config(){return Object.fromEntries(['date','level','mile','fee','linevalue','priority','linked','registered','bonusused','coupon'].map(id=>[id,$(id).type==='checkbox'?$(id).checked:$(id).value]))}
-function save(){try{localStorage.setItem(KEY,JSON.stringify({items,config:config()}))}catch{}}
-function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'{}');items=Array.isArray(v.items)?v.items.slice(0,60):[];Object.entries(v.config||{}).forEach(([id,val])=>{if(!$(id))return;if($(id).type==='checkbox')$(id).checked=!!val;else $(id).value=val})}catch{}if(!$('date').value)$('date').value=twdate()}
-function weekend(d){const w=new Date(d+'T12:00:00+08:00').getUTCDay();return w===0||w===6}
-function moneyfee(x,s){return x.region==='tw'?0:x.amount*Number(s.fee||0)/100}
-function tags(x){const n=x.store.toLowerCase();return {digital:/momo|蝦皮|pchome|amazon|netflix|steam|disney|博客來|酷澎|coupang/.test(n),travel:/華航|中華航空|長榮|星宇|klook|kkday|agoda|booking|trip.com|airbnb/.test(n),food:/星巴克|麥當勞|海底撈/.test(n),daily:/全聯|家樂福|屈臣氏|康是美/.test(n),convenience:/7.eleven|全家|萊爾富|ok超商/.test(n)}}
-function rich(x,plan,s){if(s.date<'2026-07-01'||s.date>'2027-12-31')return null;const t=tags(x),fee=moneyfee(x,s),conv=x.kind==='convenience'||t.convenience,excluded=x.kind==='excluded',level=s.level==='2',normal=['card','apple','taishin'].includes(x.method);let rate=.3,note='一般回饋';
-if(excluded)return {card:'richart',points:0,value:-fee,note:'可能屬不回饋項目，保守以零計'};
-if(conv){if(x.method==='taishin'){rate=level?3.3:1.3;note='便利商店指定台新 Pay：仍須符合銀行規定'}else {rate=0;note='便利商店非指定付款方式，保守以零計'}}else if(plan==='pay'&&x.method==='linepay'){rate=level?2.3:1.3;note='Pay著刷指定 LINE Pay'}else if(normal){let match=(plan==='digital'&&(x.kind==='digital'||t.digital))||(plan==='travel'&&(x.kind==='travel'||t.travel))||(plan==='food'&&(x.kind==='food'||t.food))||(plan==='daily'&&(x.kind==='daily'||t.daily))||(plan==='large'&&x.kind==='large')||(plan==='holiday'&&weekend(s.date));if(match){rate=level?3.3:1.3;note='指定方案，商家及交易認列仍須核對'}else if(plan==='chill'&&s.date<='2026-12-31'){rate=.3;note='Chill刷特殊活動未經逐項核對，不自動套用最高回饋'}}else{rate=0;note='付款方式可能不符合回饋，保守估零'}
-const points=Math.floor(x.amount*rate/100+1e-9);return {card:'richart',points,value:points-fee,note:note+'（'+rate+'% 試算）'}}
-function line(x,s,used){if(s.date<'2026-07-01'||s.date>'2026-12-31')return null;const t=tags(x),excluded=x.kind==='excluded'||x.kind==='convenience'||t.convenience,fee=moneyfee(x,s);if(!s.linked)return {card:'line',points:0,value:-fee,note:'尚未確認綁定臺灣 LINE Pay 帳號，不計回饋'};if(excluded)return {card:'line',points:0,value:-fee,note:'可能屬不回饋項目，保守估零'};
-const physical=['card','apple'].includes(x.method),foreign=['foreignphysical','europe'].includes(x.region);let rate=foreign&&physical&&x.region!=='europe'?2.8:1,note=rate===2.8?'海外實體一般回饋 2.8%':'一般消費 1%';let points=Math.round(x.amount*rate/100),extra=0;
-if(s.registered&&foreign&&physical&&s.date>='2026-10-01'&&s.date<='2026-12-31'){extra=Math.min(Math.max(0,450-used),Math.round(x.amount*.022));note+='；已登錄海外活動加碼（仍須確認名額）'}
-points+=extra;return {card:'line',points,value:points*Number(s.linevalue||0)-fee,extra,note}}
-function air(x,s){if(s.date<'2026-01-01'||s.date>'2026-12-31')return null;const t=tags(x),fee=moneyfee(x,s);if(x.kind==='excluded'||x.kind==='convenience'||t.convenience||x.region==='europe')return {card:'air',miles:0,value:-fee,note:'不回饋或指定排除交易'};
-const mult=x.airbonus==='yes'||(x.airbonus==='auto'&&(/華航|中華航空|華信/.test(x.store)))?2:1,miles=Math.floor(x.amount/30)*mult;return {card:'air',miles,value:miles*Number(s.mile||0)-fee,note:'商務御璽卡 '+(mult===2?'指定 2 倍哩程':'一般 NT$30／哩')}}
-function optimize(s){let best=null;for(const [plan,label] of plans){if(plan==='chill'&&s.date>'2026-12-31')continue;let total=0,records=[],bonusUsed=Number(s.bonusused)||0;for(const x of items){const choices=[rich(x,plan,s),line(x,s,bonusUsed),air(x,s)].filter(Boolean);if(!choices.length)continue;choices.sort((a,b)=>b.value-a.value||Number(b.card===s.priority)-Number(a.card===s.priority));const choice=choices[0];if(choice.card==='line')bonusUsed+=choice.extra||0;total+=choice.value;records.push({x,choice,choices})}if(!best||total>best.total+1e-7)best={plan,label,total,records}}return best}
-function draw(){const el=$('items');el.innerHTML=items.map((x,i)=>'<div class="row rowhead"><div><strong>'+esc(x.store)+'</strong><div class="muted">NT$'+fmt(x.amount)+' · '+esc(x.method)+' · '+esc(x.region)+'</div></div><button class="danger" data-remove="'+i+'">移除</button></div>').join('');const s=config(),best=optimize(s),out=$('result');if(!items.length){out.textContent='加入消費後顯示試算結果。';save();return}if(!best||!best.records.length){out.innerHTML='<div class="note">所選日期沒有足夠已核對的回饋規則，無法宣告最佳信用卡。請更新規則後再比較。</div>';save();return}const cardName={richart:'台新 Richart',line:'中信 LINE Pay',air:'中信華航'},unit={richart:'台新Point',line:'LINE POINTS',air:'華航哩'};let warning=s.date>'2026-12-31'?'<p class="note">2027 年中信權益尚未核對，本結果只能代表 Richart 方案試算，不能視為完整三卡比較。</p>':'';out.innerHTML='<div class="winner"><div class="muted">當日 Richart 建議方案</div><div class="big">'+esc(best.label)+'</div><p>全日預估淨回饋價值 <strong>NT$'+fmt(best.total)+'</strong></p><div class="muted">逐筆優先選擇回饋較高的卡片；同價值時依你的偏好選卡。</div></div>'+warning+best.records.map(({x,choice,choices})=>'<div class="row"><div class="rowhead"><div><strong>'+esc(x.store)+'</strong><div class="muted">消費 NT$'+fmt(x.amount)+'</div></div><div class="right"><span class="tag '+(choice.card==='richart'?'rich':choice.card==='line'?'line':'air')+'">'+cardName[choice.card]+'</span><div><strong>NT$'+fmt(choice.value)+'</strong></div></div></div><p class="muted">'+esc(choice.note)+'</p><div class="muted">'+choices.map(c=>cardName[c.card]+'：'+fmt(c.points??c.miles)+' '+unit[c.card]+'（估值 NT$'+fmt(c.value)+'）').join('　｜　')+'</div></div>').join('')+'<p class="note">Richart 切換方案依臺灣時間當日最後設定計算。實際請至銀行 App 切換。指定店家、國定假日、活動上限及交易認列仍須人工核對。</p>';save()}
-$('add').onclick=()=>{const store=$('store').value.trim(),amount=Number($('amount').value);if(!store||!Number.isFinite(amount)||amount<=0){alert('請輸入店家與有效金額');return}items.push({store,amount,kind:$('kind').value,method:$('method').value,region:$('region').value,airbonus:$('airbonus').value});$('store').value='';$('amount').value='';draw()};
-$('sample').onclick=()=>{items.push({store:'momo',amount:1500,kind:'digital',method:'card',region:'tw',airbonus:'no'},{store:'一般餐廳',amount:800,kind:'food',method:'card',region:'tw',airbonus:'no'});draw()};
-$('clear').onclick=()=>{if(confirm('確定清空全部消費？')){items=[];draw()}};
-$('items').onclick=e=>{const b=e.target.closest('[data-remove]');if(b){items.splice(Number(b.dataset.remove),1);draw()}};
-document.querySelectorAll('input,select').forEach(el=>{if(el.id!=='store'&&el.id!=='amount')el.addEventListener('change',draw)});load();draw();
-</script></body></html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#e8752c">
+<meta name="description" content="刷哪張？狐狸橘信用卡回饋助手。優先最佳化台新 Richart 每日方案，再比較中信 LINE Pay 與華航聯名卡。">
+<meta name="referrer" content="no-referrer">
+<title>刷哪張？｜狐狸的回饋筆記</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css?v=2.0.0">
+<script src="rules.js?v=2.0.0" defer></script>
+<script src="app.js?v=2.0.0" defer></script>
+</head>
+<body>
+<a href="#main" class="skip">跳至主要內容</a>
+<header class="masthead">
+  <div class="topbar">
+    <a class="identity" href="./" aria-label="刷哪張？首頁">
+      <span class="foxmark" aria-hidden="true"><svg viewBox="0 0 72 72"><path fill="#fffcf7" d="M11 15 24 22Q36 18 48 22L61 15 59 44Q56 58 36 63 16 58 13 44Z"/><path fill="#f9a258" d="M10 13 26 25 36 20 46 25 62 13 58 47 47 60 36 64 25 60 14 47Z"/><path fill="#fffaf1" d="M14 39 30 47 36 54 42 47 58 39 55 52 46 60 36 64 26 60 17 52Z"/><ellipse cx="26" cy="39" rx="2.5" ry="3.2" fill="#543324"/><ellipse cx="46" cy="39" rx="2.5" ry="3.2" fill="#543324"/><path d="m32 53 4 4 4-4Z" fill="#543324"/></svg></span>
+      <span><strong>刷哪張？</strong><small>狐狸的回饋筆記</small></span>
+    </a>
+    <span class="release"><span class="status-dot"></span> V2.0</span>
+  </div>
+  <div class="welcome">
+    <div><p class="eyebrow">SMART SPENDING, LITTLE FOX</p><h1>每一筆，都刷得聰明。</h1><p>先算 Richart 最佳切換，再看看另外兩張卡值不值得出場。</p></div>
+    <div class="fox-tail" aria-hidden="true"><svg viewBox="0 0 130 110"><path fill="#ffab65" d="M8 85C12 39 51 11 94 18c-23 11-40 22-32 37 8 15 34-3 55-19-4 49-40 75-72 68C27 101 16 94 8 85Z"/><path fill="#fff3db" d="M73 96c20-8 36-32 44-60-15 12-30 26-44 28-12 20-25 32-43 33 15 11 29 8 43-1Z"/></svg></div>
+  </div>
+</header>
+<div class="app-shell" id="main">
+  <nav class="tabs top-tabs" aria-label="主要功能">
+    <button type="button" data-view="today" class="active" aria-current="page">今日建議</button>
+    <button type="button" data-view="lookup">店家速查</button>
+    <button type="button" data-view="settings">我的設定</button>
+  </nav>
+  <section data-panel="today" id="panel-today" class="screen">
+    <div class="datebar">
+      <div class="datecontrol"><button type="button" id="prev-day" class="iconbtn" aria-label="前一天">‹</button><input id="date" type="date" aria-label="消費日期（臺灣時間）"><button type="button" id="next-day" class="iconbtn" aria-label="後一天">›</button><span id="daybadge" class="daybadge"></span></div>
+      <button type="button" class="textbtn" id="go-today">回今天</button>
+    </div>
+    <div class="home-grid">
+      <div class="left-column">
+        <section class="hero-card" aria-labelledby="recommend-h">
+          <div class="hero-icon" aria-hidden="true">✦</div><p class="hero-kicker" id="recommend-h">狐狸今天建議切換</p>
+          <h2 id="main-plan">加入消費後試算</h2>
+          <p id="main-explain" class="hero-description">今天的所有交易共用同一個 Richart 方案。</p>
+          <div class="hero-divider"></div>
+          <div class="hero-metrics"><div><span>三卡混用預估回饋價值</span><strong id="main-total">NT$ 0</strong></div><div><span>只刷 Richart 的最佳方案</span><strong id="rich-only">—</strong></div></div>
+          <p class="hero-foot">提醒：請於臺灣時間 23:59 前至 Richart Life App 切換。</p>
+        </section>
+        <section class="panel transactions" aria-labelledby="tx-heading">
+          <div class="section-head"><div><p class="eyebrow">MY SPENDING</p><h2 id="tx-heading">今日消費 <span id="tx-count" class="soft-count">0</span></h2></div><button class="primary" id="new-entry" type="button"><span aria-hidden="true">＋</span> 加入消費</button></div>
+          <p id="tx-summary" class="muted small">還沒有記錄今天的消費。</p>
+          <div id="tx-list" class="transaction-list"></div>
+          <div id="empty-tx" class="empty-state"><span aria-hidden="true" class="tiny-fox">🦊</span><strong>今天想刷哪張？</strong><p>加入第一筆消費，狐狸就會比較 8 種方案和 3 張信用卡。</p><button type="button" class="lightbtn" id="try-sample">試算三筆範例</button></div>
+          <div class="tx-bottom"><button type="button" class="textbtn" id="clear-day">清空當天記錄</button><span>僅儲存在此裝置</span></div>
+        </section>
+      </div>
+      <div class="right-column">
+        <section class="panel" aria-labelledby="rank-title">
+          <div class="section-head"><div><p class="eyebrow">RICHART SWITCH</p><h2 id="rank-title">八方案回饋比較</h2></div><span class="chip orange">台新優先</span></div>
+          <div class="view-switch" role="group" aria-label="回饋比較方式"><button class="selected" id="show-rich" type="button" aria-pressed="true">只看 Richart</button><button id="show-all" type="button" aria-pressed="false">三卡混用</button></div>
+          <div id="rank-chart" class="rank-chart"></div>
+          <p class="micro">每日只有一個 Richart 切換方案；當日 00:00 起交易依 23:59 最後方案計算。</p>
+        </section>
+        <section class="panel" aria-labelledby="compare-title">
+          <div class="section-head"><div><p class="eyebrow">CARD COMPARISON</p><h2 id="compare-title">逐筆推薦</h2></div><span class="chip">三卡比較</span></div>
+          <div id="compare-list" class="comparison-list"><p class="muted">加入消費後顯示。</p></div>
+          <div id="warning-box" class="notice" hidden></div>
+        </section>
+      </div>
+    </div>
+  </section>
+  <section data-panel="lookup" id="panel-lookup" class="screen" hidden>
+    <div class="screen-heading"><p class="eyebrow">FIND YOUR STORE</p><h2>店家速查</h2><p class="muted">先找店家，再選付款方式與金額。不必把每筆查詢加入今日消費。</p></div>
+    <div class="lookup-grid"><div class="panel">
+      <label for="lookup-search">要在哪裡消費？</label><input id="lookup-search" type="search" placeholder="輸入：momo、50嵐、7-ELEVEN…" autocomplete="off">
+      <div id="lookup-suggestions" class="suggestions"></div>
+      <div class="quicklist"><p class="micro">常用店家，點一下快速查詢</p><div id="favorites" class="chips"></div></div>
+    </div><div class="panel">
+      <h3 class="mini-title">試算條件</h3>
+      <div class="form-grid"><div><label for="lookup-amount">金額 NT$</label><input id="lookup-amount" type="number" value="300" min="1" step="1" inputmode="numeric"></div><div><label for="lookup-payment">付款方式</label><select id="lookup-payment"></select></div><div><label for="lookup-category">消費類別</label><select id="lookup-category"></select></div><div><label for="lookup-region">消費地區</label><select id="lookup-region"><option value="tw">臺灣</option><option value="abroad">海外實體</option><option value="abroadonline">海外網路</option><option value="europe">歐洲實體</option></select></div></div>
+      <button type="button" id="lookup-add" class="primary block">將此筆加入當天消費</button></div></div>
+    <section class="panel" aria-live="polite"><h3 class="mini-title">查詢結果</h3><div id="lookup-result"></div></section>
+    <section class="panel"><h3 class="mini-title">關於店家認列</h3><p class="muted">官方列名商家也可能因分店、第三方支付、實際請款名稱或 MCC 不符合而無法獲得加碼。未列名的商家不會自動假設符合高回饋；可自行選擇類別試算，結果會標示「待確認」。</p></section>
+  </section>
+  <section data-panel="settings" id="panel-settings" class="screen" hidden>
+    <div class="screen-heading"><p class="eyebrow">YOUR PREFERENCES</p><h2>我的設定</h2><p class="muted">僅須第一次設定；預設以台新 Richart 為主要信用卡。</p></div>
+    <div class="settings-grid"><section class="panel">
+      <h3 class="mini-title">Richart 資格</h3>
+      <label for="level">回饋等級</label><select id="level"><option value="1">LEVEL 1（未確認自動扣繳資格）</option><option value="2">LEVEL 2（已確認生效）</option></select>
+      <p class="micro">設定自動扣繳須等次期帳單結帳後才可能符合 LEVEL 2；新戶另有期限條件。</p>
+      <label class="check"><input id="bonus-cap" type="checkbox"><span>本期已用完 Richart 加碼消費額度</span></label>
+      <label class="check"><input id="holiday" type="checkbox"><span>此日期已查證為臺灣國定假日（平日才需要）</span></label>
+      <p class="micro">系統自動辨識週六、週日；平日國定假日須依台新公告自行確認。</p>
+    </section><section class="panel">
+      <h3 class="mini-title">其他兩張卡</h3>
+      <label class="check"><input id="card-line" type="checkbox" checked><span>納入中信 LINE Pay 卡比較</span></label>
+      <label class="check"><input id="line-linked" type="checkbox"><span>已綁定有效的臺灣 LINE Pay 帳號</span></label>
+      <label class="check"><input id="line-bonus" type="checkbox"><span>已完成 2026 年第 4 季海外加碼登錄</span></label>
+      <label for="line-used">LINE Pay 海外加碼已領點數（上限 450）</label><input id="line-used" type="number" value="0" min="0" max="450">
+      <label class="check"><input id="card-air" type="checkbox" checked><span>納入中信中華航空商務御璽卡比較</span></label>
+      <label for="birth-month">華航聯名卡正卡人生日月份（選填）</label><select id="birth-month"><option value="0">不套用生日加碼</option><option value="1">1 月</option><option value="2">2 月</option><option value="3">3 月</option><option value="4">4 月</option><option value="5">5 月</option><option value="6">6 月</option><option value="7">7 月</option><option value="8">8 月</option><option value="9">9 月</option><option value="10">10 月</option><option value="11">11 月</option><option value="12">12 月</option></select>
+    </section><section class="panel">
+      <h3 class="mini-title">價值換算</h3><p class="micro">僅供比較，不代表點數可向銀行兌換成現金。</p>
+      <div class="form-grid"><div><label for="mile-value">每華航哩估值（NT$）</label><input id="mile-value" type="number" min="0" max="5" step=".05" value=".4"></div><div><label for="line-value">每 LINE POINTS 估值（NT$）</label><input id="line-value" type="number" min="0" max="5" step=".1" value="1"></div><div class="full"><label for="foreign-fee">海外刷卡手續費假設（%）</label><input id="foreign-fee" type="number" min="0" max="10" step=".1" value="1.5"></div></div>
+      <button type="button" class="lightbtn" id="reset-preferences">還原預設設定</button>
+    </section><section class="panel">
+      <h3 class="mini-title">常用店家</h3><p class="muted small">從店家速查加入收藏；只存在此裝置。</p><div id="manage-favorites" class="chips"></div>
+      <h3 class="mini-title space-top">資料與隱私</h3><p class="micro">所有交易、設定與收藏儲存在本機瀏覽器。沒有帳號、分析追蹤或第三方資料上傳。清除瀏覽器網站資料會移除記錄；不同裝置不會同步。</p><button type="button" class="danger-text" id="erase-all">刪除本裝置所有記錄與設定</button>
+    </section></div>
+    <section class="panel references"><h3 class="mini-title">銀行規則及計算限制</h3><p>資料基準：2026 年 11 月 20 日。Richart 方案公告至 2027 年底；Chill刷、中信 LINE Pay 活動及本工具的中信華航哩程模型目前僅核對至 2026 年底。</p><ul>
+      <li><a target="_blank" rel="noopener noreferrer" href="https://mkp.taishinbank.com.tw/s/2025/RichartCard_2025/index.html">台新 Richart 官方權益及注意事項</a></li>
+      <li><a target="_blank" rel="noopener noreferrer" href="https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/notice.html">中信 LINE Pay 回饋計畫</a></li>
+      <li><a target="_blank" rel="noopener noreferrer" href="https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/page_travel.html">中信海外加碼活動</a></li>
+      <li><a target="_blank" rel="noopener noreferrer" href="https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/feature.html">中信華航商務御璽卡權益</a></li>
+    </ul><p class="micro">各卡實際回饋依銀行請款、入帳、MCC、排除交易、優惠名額與個人資格為準。工具未涵蓋全部限時商家優惠、LINE Pay 領券、台新完整聯卡中心小額支付名單、跨期信用額度控管，亦未計入哩程兌換的機票稅費。無法確認條件時不應視為保證回饋。</p><p class="micro">獨立製作的非官方工具。本站不要求卡號、密碼或驗證碼。</p></section>
+  </section>
+  <footer class="footer">狐狸幫你算，最後還是以銀行規定為準。<span>© 刷哪張？ v2.0</span></footer>
+</div>
+<nav class="tabs bottom-tabs" aria-label="手機功能選單"><button data-view="today" type="button" class="active" aria-current="page"><span aria-hidden="true">⌂</span>今日</button><button data-view="lookup" type="button"><span aria-hidden="true">⌕</span>速查</button><button data-view="settings" type="button"><span aria-hidden="true">⚙</span>設定</button></nav>
+<dialog id="entry-dialog" aria-labelledby="entry-title">
+<form method="dialog" id="entry-form">
+  <div class="sheet-head"><div><p class="eyebrow">ADD TRANSACTION</p><h2 id="entry-title">加入一筆消費</h2></div><button type="button" class="iconbtn close-dialog" aria-label="關閉">×</button></div>
+  <div class="sheet-body">
+   <label for="entry-store">店家名稱</label><input id="entry-store" type="text" placeholder="例如：50嵐、momo、一般餐廳" autocomplete="off" required maxlength="70">
+   <div id="entry-suggestions" class="suggestions"></div>
+   <div class="form-grid"><div><label for="entry-amount">金額 NT$</label><input id="entry-amount" type="number" min="1" step="1" inputmode="numeric" placeholder="0" required></div><div><label for="entry-payment">付款方式</label><select id="entry-payment"></select></div><div><label for="entry-category">消費類別</label><select id="entry-category"></select></div><div><label for="entry-region">消費地區</label><select id="entry-region"><option value="tw">臺灣</option><option value="abroad">海外實體</option><option value="abroadonline">海外網路</option><option value="europe">歐洲實體</option></select></div></div>
+   <label class="check"><input id="air-double" type="checkbox"><span>已核對這筆符合華航聯名卡指定交易 2 倍哩程</span></label>
+   <p class="micro">自動辨識只適用已收錄商家。一般餐廳需符合銀行認列的餐飲業 MCC。</p>
+  </div>
+  <div class="sheet-actions"><button type="button" id="cancel-entry" class="lightbtn">取消</button><button type="submit" id="save-entry" class="primary">儲存消費</button></div>
+</form>
+</dialog>
+<div class="toast" role="status" aria-live="polite" id="toast"></div>
+</body></html>

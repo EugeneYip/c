@@ -1,0 +1,38 @@
+name: Quality checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check script syntax
+        run: |
+          node --check rules.js
+          node --check app.js
+          node --check tests/browser.test.cjs
+      - name: Reward calculation tests
+        run: node --test tests/rules.test.cjs
+      - name: Install browser test dependency
+        run: |
+          npm install --no-audit --no-fund --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Phone and tablet smoke tests
+        run: node tests/browser.test.cjs
+      - name: Upload viewport screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cardfox-ui-screenshots
+          path: tests/artifacts/
+          if-no-files-found: ignore
+          retention-days: 7
