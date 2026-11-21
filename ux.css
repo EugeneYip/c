@@ -1,0 +1,65 @@
+/* Fox UI v2.1 • navigation, phone typography, modal and version checker */
+.header-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.update-link{background:transparent;border:1px solid #ffffff91;color:white;border-radius:999px;min-height:40px;padding:7px 11px;font-size:12px;font-weight:750;white-space:nowrap;touch-action:manipulation}
+.update-link:hover{background:#ffffff24}
+.update-note{margin:8px 0 0!important;color:#fff6df!important;font-size:12px!important;line-height:1.4!important;max-width:44ch}
+.update-note:empty{display:none}
+.headline-line{white-space:nowrap}
+.headline-line+ .headline-line:before{content:' ';white-space:pre}
+.fox-tail{pointer-events:none}
+.update-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px;border-radius:14px;background:#fff0d8;border:1px solid #ffc28c;color:#7e3d17;padding:12px 15px;font-size:13px;font-weight:750}
+.update-banner[hidden]{display:none}
+.update-banner button{font:inherit;border:0;border-radius:10px;padding:9px 13px;background:#a94310;color:white;white-space:nowrap;min-height:40px}
+.bottom-tabs svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+.bottom-tabs button{touch-action:manipulation;gap:3px}
+#new-entry{touch-action:manipulation;min-height:46px}
+#entry-dialog{overscroll-behavior:contain}
+#entry-dialog .sheet-actions button{min-height:47px}
+@media(max-width:689px){
+ .topbar{padding:11px 16px}
+ .identity{gap:8px}
+ .identity strong{font-size:19px}
+ .identity small{font-size:10px;letter-spacing:.07em}
+ .foxmark{height:42px;width:42px;border-radius:13px}
+ .foxmark svg{width:36px;height:36px}
+ .release{font-size:11px;padding:5px 8px}
+ .header-actions{gap:6px}
+ .update-link{font-size:11px;min-height:38px;padding:7px 9px}
+ .welcome{padding:17px 18px 19px;min-height:0}
+ .welcome .eyebrow{font-size:10px;letter-spacing:.13em;margin-bottom:7px}
+ .welcome h1{font-size:clamp(23px,6.5vw,29px);line-height:1.28;letter-spacing:-.65px;margin-bottom:7px}
+ .headline-line{display:block}
+ .headline-line+.headline-line:before{content:''}
+ .welcome p:last-of-type{font-size:13px;line-height:1.52;max-width:30ch}
+ .fox-tail{position:absolute;right:-5px;bottom:-13px;opacity:.23;width:135px;height:115px}
+ .hero-card{padding:19px 18px 16px}
+ .hero-metrics strong{font-size:clamp(16px,4.3vw,22px)}
+ .datebar{gap:4px}
+ .app-shell{padding-top:13px}
+ .bottom-tabs{padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+ dialog{top:auto!important;bottom:0!important;left:0;right:0;margin:0 auto!important;width:100%;max-width:100%;max-height:calc(100dvh - 12px);border-radius:23px 23px 0 0}
+ .sheet-body{max-height:calc(100dvh - 190px)}
+}
+@media(max-width:354px){
+ .identity strong{font-size:18px}
+ .identity small{font-size:9px}
+ .foxmark{width:37px;height:37px}
+ .update-link{padding:7px;font-size:10px}
+ .release{padding:5px 6px}
+ .welcome h1{font-size:22px}
+}
+@media(min-width:690px){
+ .welcome h1{font-size:clamp(28px,3.4vw,38px)}
+ .welcome .eyebrow{letter-spacing:.12em}
+}
+
+/* Mobile date controls use intentional rows, never orphan the Today link. */
+@media(max-width:689px){
+ .datebar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;column-gap:7px}
+ .datecontrol{display:grid;grid-template-columns:36px minmax(0,1fr) 36px;gap:5px;min-width:0}
+ .datecontrol .iconbtn{min-width:36px;width:36px;height:42px;font-size:24px}
+ .datecontrol input[type=date]{max-width:none;width:100%;min-width:0;padding:7px 5px;font-size:14px;min-height:42px}
+ .datecontrol .daybadge{grid-column:1/-1;justify-self:start;white-space:nowrap;margin-top:3px}
+ .datebar #go-today{min-width:52px;margin-top:0}
+ .welcome > div:first-child > p:not(.eyebrow):not(.update-note){font-size:13px;line-height:1.45;max-width:none;margin:0;color:#fff6e9}
+}

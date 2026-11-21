@@ -8,9 +8,11 @@
 <meta name="referrer" content="no-referrer">
 <title>刷哪張？｜狐狸的回饋筆記</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css?v=2.0.0">
-<script src="rules.js?v=2.0.0" defer></script>
-<script src="app.js?v=2.0.0" defer></script>
+<link rel="stylesheet" href="styles.css?v=2.1.0">
+<link rel="stylesheet" href="ux.css?v=2.1.0">
+<script src="rules.js?v=2.1.0" defer></script>
+<script src="app.js?v=2.1.0" defer></script>
+<script src="updates.js?v=2.1.0" defer></script>
 </head>
 <body>
 <a href="#main" class="skip">跳至主要內容</a>
@@ -20,14 +22,15 @@
       <span class="foxmark" aria-hidden="true"><svg viewBox="0 0 72 72"><path fill="#fffcf7" d="M11 15 24 22Q36 18 48 22L61 15 59 44Q56 58 36 63 16 58 13 44Z"/><path fill="#f9a258" d="M10 13 26 25 36 20 46 25 62 13 58 47 47 60 36 64 25 60 14 47Z"/><path fill="#fffaf1" d="M14 39 30 47 36 54 42 47 58 39 55 52 46 60 36 64 26 60 17 52Z"/><ellipse cx="26" cy="39" rx="2.5" ry="3.2" fill="#543324"/><ellipse cx="46" cy="39" rx="2.5" ry="3.2" fill="#543324"/><path d="m32 53 4 4 4-4Z" fill="#543324"/></svg></span>
       <span><strong>刷哪張？</strong><small>狐狸的回饋筆記</small></span>
     </a>
-    <span class="release"><span class="status-dot"></span> V2.0</span>
+    <div class="header-actions"><button type="button" id="check-update" class="update-link">檢查更新</button><span class="release"><span class="status-dot"></span> V2.1</span></div>
   </div>
   <div class="welcome">
-    <div><p class="eyebrow">SMART SPENDING, LITTLE FOX</p><h1>每一筆，都刷得聰明。</h1><p>先算 Richart 最佳切換，再看看另外兩張卡值不值得出場。</p></div>
+    <div><p class="eyebrow">FOX REWARDS</p><h1><span class="headline-line">每一筆，</span><span class="headline-line">都刷得聰明。</span></h1><p>Richart 優先，三卡一起比。</p><p class="update-note" id="update-status" role="status" aria-live="polite"></p></div>
     <div class="fox-tail" aria-hidden="true"><svg viewBox="0 0 130 110"><path fill="#ffab65" d="M8 85C12 39 51 11 94 18c-23 11-40 22-32 37 8 15 34-3 55-19-4 49-40 75-72 68C27 101 16 94 8 85Z"/><path fill="#fff3db" d="M73 96c20-8 36-32 44-60-15 12-30 26-44 28-12 20-25 32-43 33 15 11 29 8 43-1Z"/></svg></div>
   </div>
 </header>
 <div class="app-shell" id="main">
+  <div class="update-banner" id="update-banner" hidden><span>發現新版網站，可以立即更新。</span><button type="button" id="refresh-site">立即更新</button></div>
   <nav class="tabs top-tabs" aria-label="主要功能">
     <button type="button" data-view="today" class="active" aria-current="page">今日建議</button>
     <button type="button" data-view="lookup">店家速查</button>
@@ -41,11 +44,11 @@
     <div class="home-grid">
       <div class="left-column">
         <section class="hero-card" aria-labelledby="recommend-h">
-          <div class="hero-icon" aria-hidden="true">✦</div><p class="hero-kicker" id="recommend-h">狐狸今天建議切換</p>
+          <div class="hero-icon" aria-hidden="true">✦</div><p class="hero-kicker" id="recommend-h">當日 Richart 建議方案</p>
           <h2 id="main-plan">加入消費後試算</h2>
           <p id="main-explain" class="hero-description">今天的所有交易共用同一個 Richart 方案。</p>
           <div class="hero-divider"></div>
-          <div class="hero-metrics"><div><span>三卡混用預估回饋價值</span><strong id="main-total">NT$ 0</strong></div><div><span>只刷 Richart 的最佳方案</span><strong id="rich-only">—</strong></div></div>
+          <div class="hero-metrics"><div><span>只刷 Richart 的最佳方案</span><strong id="rich-only">—</strong></div><div><span>三卡混用預估回饋價值</span><strong id="main-total">NT$ 0</strong></div></div>
           <p class="hero-foot">提醒：請於臺灣時間 23:59 前至 Richart Life App 切換。</p>
         </section>
         <section class="panel transactions" aria-labelledby="tx-heading">
@@ -79,7 +82,7 @@
       <div class="quicklist"><p class="micro">常用店家，點一下快速查詢</p><div id="favorites" class="chips"></div></div>
     </div><div class="panel">
       <h3 class="mini-title">試算條件</h3>
-      <div class="form-grid"><div><label for="lookup-amount">金額 NT$</label><input id="lookup-amount" type="number" value="300" min="1" step="1" inputmode="numeric"></div><div><label for="lookup-payment">付款方式</label><select id="lookup-payment"></select></div><div><label for="lookup-category">消費類別</label><select id="lookup-category"></select></div><div><label for="lookup-region">消費地區</label><select id="lookup-region"><option value="tw">臺灣</option><option value="abroad">海外實體</option><option value="abroadonline">海外網路</option><option value="europe">歐洲指定不回饋地區實體</option></select></div></div>
+      <div class="form-grid"><div><label for="lookup-amount">金額 NT$</label><input id="lookup-amount" type="number" value="300" min="1" step="0.01" inputmode="decimal"></div><div><label for="lookup-payment">付款方式</label><select id="lookup-payment"></select></div><div><label for="lookup-category">消費類別</label><select id="lookup-category"></select></div><div><label for="lookup-region">消費地區</label><select id="lookup-region"><option value="tw">臺灣</option><option value="abroad">海外實體</option><option value="abroadonline">海外網路</option><option value="europe">歐洲指定不回饋地區實體</option></select></div></div>
       <button type="button" id="lookup-add" class="primary block">將此筆加入當天消費</button></div></div>
     <section class="panel" aria-live="polite"><h3 class="mini-title">查詢結果</h3><div id="lookup-result"></div></section>
     <section class="panel"><h3 class="mini-title">關於店家認列</h3><p class="muted">官方列名商家也可能因分店、第三方支付、實際請款名稱或 MCC 不符合而無法獲得加碼。未列名的商家不會自動假設符合高回饋；可自行選擇類別試算，結果會標示「待確認」。</p></section>
@@ -116,16 +119,16 @@
       <li><a target="_blank" rel="noopener noreferrer" href="https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/feature.html">中信華航商務御璽卡權益</a></li>
     </ul><p class="micro">各卡實際回饋依銀行請款、入帳、MCC、排除交易、優惠名額與個人資格為準。工具未涵蓋全部限時商家優惠、LINE Pay 領券、台新完整聯卡中心小額支付名單、跨期信用額度控管，亦未計入哩程兌換的機票稅費。無法確認條件時不應視為保證回饋。</p><p class="micro">獨立製作的非官方工具。本站不要求卡號、密碼或驗證碼。</p></section>
   </section>
-  <footer class="footer">狐狸幫你算，最後還是以銀行規定為準。<span>© 刷哪張？ v2.0</span></footer>
+  <footer class="footer">狐狸幫你算，最後還是以銀行規定為準。<span>© 刷哪張？ v2.1</span></footer>
 </div>
-<nav class="tabs bottom-tabs" aria-label="手機功能選單"><button data-view="today" type="button" class="active" aria-current="page"><span aria-hidden="true">⌂</span>今日</button><button data-view="lookup" type="button"><span aria-hidden="true">⌕</span>速查</button><button data-view="settings" type="button"><span aria-hidden="true">⚙</span>設定</button></nav>
+<nav class="tabs bottom-tabs" aria-label="手機功能選單"><button data-view="today" type="button" class="active" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 11 9-7 9 7v9h-6v-6H9v6H3z"/></svg>今日</button><button data-view="lookup" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>速查</button><button data-view="settings" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 3.5h6l.7 2.4 2 .9 2.2-1.2 3 5.2-2 1.7v2.4l2 1.7-3 5.2-2.2-1.2-2 .9L15 24H9l-.7-2.4-2-.9-2.2 1.2-3-5.2 2-1.7v-2.4l-2-1.7 3-5.2 2.2 1.2 2-.9z" transform="translate(0 -1.3) scale(.96)"/><circle cx="12" cy="12" r="3"/></svg>設定</button></nav>
 <dialog id="entry-dialog" aria-labelledby="entry-title">
 <form method="dialog" id="entry-form">
   <div class="sheet-head"><div><p class="eyebrow">ADD TRANSACTION</p><h2 id="entry-title">加入一筆消費</h2></div><button type="button" class="iconbtn close-dialog" aria-label="關閉">×</button></div>
   <div class="sheet-body">
    <label for="entry-store">店家名稱</label><input id="entry-store" type="text" placeholder="例如：50嵐、momo、一般餐廳" autocomplete="off" required maxlength="70">
    <div id="entry-suggestions" class="suggestions"></div>
-   <div class="form-grid"><div><label for="entry-amount">金額 NT$</label><input id="entry-amount" type="number" min="1" step="1" inputmode="numeric" placeholder="0" required></div><div><label for="entry-payment">付款方式</label><select id="entry-payment"></select></div><div><label for="entry-category">消費類別</label><select id="entry-category"></select></div><div><label for="entry-region">消費地區</label><select id="entry-region"><option value="tw">臺灣</option><option value="abroad">海外實體</option><option value="abroadonline">海外網路</option><option value="europe">歐洲指定不回饋地區實體</option></select></div></div>
+   <div class="form-grid"><div><label for="entry-amount">金額 NT$</label><input id="entry-amount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="0" required></div><div><label for="entry-payment">付款方式</label><select id="entry-payment"></select></div><div><label for="entry-category">消費類別</label><select id="entry-category"></select></div><div><label for="entry-region">消費地區</label><select id="entry-region"><option value="tw">臺灣</option><option value="abroad">海外實體</option><option value="abroadonline">海外網路</option><option value="europe">歐洲指定不回饋地區實體</option></select></div></div>
    <label class="check"><input id="air-double" type="checkbox"><span>已核對這筆符合華航聯名卡指定交易 2 倍哩程</span></label>
    <p class="micro">自動辨識只適用已收錄商家。一般餐廳需符合銀行認列的餐飲業 MCC。</p>
   </div>

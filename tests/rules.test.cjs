@@ -106,3 +106,39 @@ test('convenience stores lose even base rewards when the special bonus cap is ex
  const s=config({bonusCapReached:true});
  assert.equal(R.rich(tx('7-ELEVEN',1000,'auto','taishin'),'pay',s).points,0);
 });
+
+test('Chill-only merchants cannot silently qualify for unrelated regular plans',()=>{
+ const s=config();
+ assert.equal(R.rich(tx('Nike',1000),'large',s).points,3);
+ assert.equal(R.rich(tx('Nike',1000),'chill',s).points,50);
+ assert.equal(R.rich(tx('World Gym',1000),'food',s).points,3);
+ assert.equal(R.rich(tx('Pinkoi',1000),'digital',s).points,3);
+});
+test('Uber Eats is food and is eligible for Chill designated 3.3',()=>{
+ const s=config();
+ assert.equal(R.identify(tx('Uber Eats',1000)).group,'food');
+ assert.equal(R.rich(tx('Uber Eats',1000),'food',s).points,33);
+});
+test('CTBC excludes specified European physical stores for both entry-level cards',()=>{
+ const s=config({lineBonus:true});
+ assert.equal(R.line(tx('法國實體店',1000,'general','card','europe'),s).points,0);
+ assert.equal(R.air(tx('法國實體店',1000,'general','card','europe'),s).points,0);
+});
+test('Taiwan TWQR is not a foreign-worldwide wallet',()=>{
+ const s=config();
+ assert.equal(R.rich(tx('海外商店',1000,'travel','taishin','abroad'),'pay',s).points,3);
+ assert.equal(R.rich(tx('海外商店',1000,'travel','taishin','abroad'),'travel',s).points,3);
+ assert.equal(R.rich(tx('海外商店',1000,'travel','plus','abroad'),'pay',s).points,38);
+});
+test('wallet bonus and standard plan are still subject to timezone-boundary dates',()=>{
+ const a=tx('momo',1000);
+ assert.equal(R.rich(a,'digital',config({date:'2026-06-30'})),null);
+ assert.equal(R.rich(a,'digital',config({date:'2027-12-31'})).points,33);
+ assert.equal(R.rich(a,'digital',config({date:'2028-01-01'})),null);
+});
+test('strongly different miles values change card selection without assuming cash equivalence',()=>{
+ const a=tx('一般店',3000);
+ const low=R.compare(a,'daily',config({mileValue:0}));
+ const high=R.compare(a,'daily',config({mileValue:3}));
+ assert.notEqual(low[0].card,high[0].card);
+});

@@ -1,4 +1,4 @@
-/* 刷哪張？ CardFox rules v2.0 — verified baseline 2026-11-20. */
+/* 刷哪張？ CardFox rules v2.1 — verified baseline 2026-11-20. */
 (function(root) {
 "use strict";
 const SOURCES={richart:"https://mkp.taishinbank.com.tw/s/2025/RichartCard_2025/index.html",line:"https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/notice.html",travel:"https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/page_travel.html",air:"https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/feature.html"};
@@ -12,11 +12,13 @@ add("7-ELEVEN~7-11~統一超商|全家~FamilyMart","convenience");
 add("50嵐|得正|五桐號|龜記|UG TEA|叮哥茶飲|CAFE!N|%Arabica|COMPOSE COFFEE","food",10);
 add("詹記麻辣火鍋|萬客什鍋|海底撈|屋馬燒肉|茶六燒肉堂|新村站著吃|燒肉政宗|碳佐麻里|雞湯大叔|貳樓|樂子 the Diner|CAFE ACME|Draft Land|臺虎精釀","food",10);
 add("饗饗|NAGOMI","food",5);
-add("Netflix|Disney+|巴哈姆特|BOOK WALKER|Animate|樂天KOBO|Readmoo讀墨|愛爾達|Pinkoi","digital",5);
-add("蝦皮|淘寶|酷澎~Coupang|Uber Eats~Ubereats","digital",3.3);
-add("Adidas|New Balance|PUMA|Onitsuka Tiger|Nike|HOKA|Salomon|lululemon","large",5);
-add("Anytime Fitness|健身工廠|World Gym|超核心 Hypercore|KX PILATES|17FIT","food",5);
-add("好好生醫|POPCARE好在乎|營養師輕食|VITABOX|MYPROTEIN|UrMart","digital",5);
+add("Netflix|Disney+|巴哈姆特|BOOK WALKER|Animate|樂天KOBO|Readmoo讀墨|愛爾達","digital",5);
+add("Pinkoi","general",5);
+add("蝦皮|淘寶|酷澎~Coupang","digital",3.3);
+add("Uber Eats~Ubereats","food",3.3);
+add("Adidas|New Balance|PUMA|Onitsuka Tiger|Nike|HOKA|Salomon|lululemon","general",5);
+add("Anytime Fitness|健身工廠|World Gym|超核心 Hypercore|KX PILATES|17FIT","general",5);
+add("好好生醫|POPCARE好在乎|營養師輕食|VITABOX|MYPROTEIN|UrMart","general",5);
 add("momo|PChome|Amazon|東森購物|博客來|Richart Mart|PayEasy|iHerb|SHEIN|Farfetch|Olive Young|Steam|PlayStation|Nintendo|ChatGPT|Notion|Canva|Perplexity|Claude|Hahow|PressPlay|Amazing Talker","digital");
 add("新光三越|遠東百貨|遠東SOGO|漢神百貨|微風廣場|台北101|遠東巨城|南紡購物中心|誠品生活|京站|三創生活|夢時代|統一時代|中友百貨|LaLaport|MITSUI OUTLET PARK|華泰名品城|SKM Park|IKEA|特力屋|HOLA|宜得利|UNIQLO|GU|ZARA|NET","large");
 add("唐吉訶德|LOPIA|萬家福|大買家|寶雅|康是美|屈臣氏|杏一醫療|大樹藥局|丁丁藥局|臺鐵|高鐵|台灣大車隊|LINEGO|Yoxi|中油直營|全國加油|美廉社","daily");
@@ -39,16 +41,16 @@ function output(card,points,rate,reason,tx,s,opts={}){
 }
 function rich(tx,plan,s){
  if(s.cards?.richart===false||!valid(s.date,"2026-07-01","2027-12-31"))return null;
- const {group,merchant,assumed}=identify(tx),level2=Number(s.level)===2,normal=["card","apple","taishin","plus"].includes(tx.method),wallet=["linepay","full"].includes(tx.method),hol=weekend(s.date)||!!s.confirmedHoliday;
+ const {group,merchant,assumed}=identify(tx),level2=Number(s.level)===2,normal=["card","apple"].includes(tx.method)||(tx.method==="taishin"&&tx.region==="tw")||(tx.method==="plus"&&tx.region!=="tw"),wallet=["linepay","full"].includes(tx.method),hol=weekend(s.date)||!!s.confirmedHoliday;
  let rate=.3,reason="一般消費",uncertain=assumed||!merchant;
  if(group==="excluded"){rate=0;reason="可能不回饋的交易";uncertain=true;}
  else if(group==="insurance"){rate=1.3;reason="一般保費一次付清（特殊險種例外）";uncertain=true;if(plan==="holiday"&&hol&&(normal||wallet)){rate=level2?2:1.3;reason="假日刷保費（需符合條件）";}}
  else if(group==="convenience"){
   rate=0;reason="超商一般回饋排除";
-  if(tx.method==="taishin"&&["daily","pay"].includes(plan)){rate=level2?(plan==="pay"?3.8:3.3):1.3;reason="指定超商使用台新Pay";}
+  if(tx.region==="tw"&&tx.method==="taishin"&&["daily","pay"].includes(plan)){rate=level2?(plan==="pay"?3.8:3.3):1.3;reason="指定超商使用台新Pay";}
   uncertain=true;
  }else if(plan==="pay"){
-  if(["taishin","plus"].includes(tx.method)){rate=level2?3.8:1.3;reason="Pay著刷：台新Pay／Pay+";uncertain=tx.method==="plus"||uncertain;}
+  if((tx.method==="taishin"&&tx.region==="tw")||(tx.method==="plus"&&tx.region!=="tw")){rate=level2?3.8:1.3;reason="Pay著刷：台新Pay／Pay+";uncertain=tx.method==="plus"||uncertain;}
   else if(wallet){rate=level2?2.3:1.3;reason="Pay著刷：LINE Pay／全盈+Pay";}
  }else if(plan==="chill"&&valid(s.date,"2026-07-08","2026-12-31")&&merchant?.chill&&["card","apple","taishin","linepay"].includes(tx.method)){
   rate=level2?merchant.chill:1.3;reason="Chill刷指定商家";uncertain=false;
@@ -63,7 +65,8 @@ function rich(tx,plan,s){
 }
 function line(tx,s,used=0){
  if(s.cards?.line===false||!s.lineLinked||!valid(s.date,"2026-07-01","2026-12-31"))return null;
- const {group}=identify(tx),physical=["card","apple"].includes(tx.method)&&["abroad","europe"].includes(tx.region);
+ const {group}=identify(tx),physical=["card","apple"].includes(tx.method)&&tx.region==="abroad";
+ if(tx.region==="europe")return output("line",0,0,"中信列示之指定歐洲國家實體交易不回饋",tx,s,{uncertain:false,extra:0,source:SOURCES.line});
  if(group==="excluded")return output("line",0,0,"保守以不回饋估算",tx,s,{uncertain:true,extra:0});
  const rate=physical?2.8:1,base=roundPoints(tx.amount,rate),extra=(physical&&s.lineBonus&&valid(s.date,"2026-10-01","2026-12-31"))?Math.min(Math.max(0,450-used),roundPoints(tx.amount,2.2)):0;
  return output("line",base+extra,rate+(extra?2.2:0),physical?"海外實體一般回饋"+(extra?"＋已登錄額外加碼":""):"一般消費",tx,s,{extra,uncertain:["convenience","insurance"].includes(group)||!!extra,source:extra?SOURCES.travel:SOURCES.line});

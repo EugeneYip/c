@@ -1,50 +1,93 @@
-/* Phone/tablet smoke test. Run in GitHub Actions after installing Playwright */
-const {chromium}=require('playwright');
+/* Multi-engine end-to-end smoke test, including WebKit (iOS Safari engine). */
+const {chromium,webkit}=require('playwright');
 const assert=require('node:assert/strict');
-const path=require('node:path');
-const fs=require('node:fs');
 const http=require('node:http');
+const fs=require('node:fs');
+const path=require('node:path');
 (async()=>{
- const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
- const root=path.join(__dirname,'..');
+ const root=path.join(__dirname,'..'), folder=path.join(__dirname,'artifacts');
+ fs.mkdirSync(folder,{recursive:true});
  const server=http.createServer((req,res)=>{
   const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
-  const relative=pathname.replace(/^\/c\/?/, '')||'index.html',full=path.resolve(root,relative);
-  if(!full.startsWith(root+path.sep)&&full!==path.join(root,'index.html')){res.writeHead(403);res.end();return;}
-  if(!fs.existsSync(full)||!fs.statSync(full).isFile()){res.writeHead(404);res.end();return;}
-  const mime=full.endsWith('.css')?'text/css':full.endsWith('.js')?'text/javascript':full.endsWith('.svg')?'image/svg+xml':'text/html';
-  res.writeHead(200,{'Content-Type':mime+'; charset=utf-8'});res.end(fs.readFileSync(full));
+  const relative=pathname.replace(/^\/c\/?/,'')||'index.html';
+  const full=path.resolve(root,relative);
+  if(!full.startsWith(root+path.sep)&&full!==path.join(root,'index.html')){res.writeHead(403);res.end();return}
+  if(!fs.existsSync(full)||!fs.statSync(full).isFile()){res.writeHead(404);res.end();return}
+  const mime=full.endsWith('.css')?'text/css':full.endsWith('.js')?'text/javascript':full.endsWith('.svg')?'image/svg+xml':full.endsWith('.json')?'application/json':'text/html';
+  res.writeHead(200,{'Content-Type':mime+'; charset=utf-8','Cache-Control':'public, max-age=3600'});res.end(fs.readFileSync(full));
  });
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  const url='http://127.0.0.1:'+server.address().port+'/c/';
- const folder=path.join(__dirname,'artifacts');fs.mkdirSync(folder,{recursive:true});
- for(const [name,width,height] of [['mobile',390,844],['tablet',820,1180]]){
-  const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:2});
-  const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(url,{waitUntil:'load'});
-  assert.match(await page.title(),/刷哪張/);
-  assert.equal(await page.locator('#main-plan').innerText(),'加入消費後試算');
-  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
-  assert.ok(overflow<=1,'horizontal overflow on '+name+': '+overflow);
-  const dialog=page.locator('#entry-dialog');
-  await page.locator('#new-entry').click();
-  await dialog.locator('#entry-store').fill('50嵐');
-  await dialog.locator('#entry-amount').fill('100');
-  await dialog.locator('#entry-payment').selectOption('card');
-  await dialog.locator('#save-entry').click();
-  assert.equal(await page.locator('#tx-count').innerText(),'1');
-  await page.screenshot({path:path.join(folder,name+'.png'),fullPage:true});
-  await page.reload();
-  assert.equal(await page.locator('#tx-count').innerText(),'1');
-  const nav=selector=>page.locator(name==='mobile'?'.bottom-tabs [data-view='+selector+']':'.top-tabs [data-view='+selector+']');
-  await nav('settings').click();
-  assert.equal(await page.locator('#panel-settings').isVisible(),true);
-  await nav('lookup').click();
-  await page.locator('#lookup-search').fill('momo');
-  assert.match(await page.locator('#lookup-result').innerText(),/Richart/);
-  assert.deepEqual(errors,[],'JavaScript errors on '+name);
-  await page.close();
-  console.log(name+' viewport, add transaction, persistence, navigation and lookup: PASS');
- }
- await browser.close();await new Promise(resolve=>server.close(resolve));
+ try{
+  for(const [engine,type] of [['chromium',chromium],['webkit',webkit]]){
+   const browser=await type.launch({headless:true,args:engine==='chromium'?['--no-sandbox']:[]});
+   try{
+    for(const [name,width,height] of [['small',320,680],['mobile',390,844],['tablet',820,1180]]){
+     const context=await browser.newContext({viewport:{width,height},isMobile:width<=390,hasTouch:width<=390,locale:'zh-TW'});
+     const page=await context.newPage(),errs=[];
+     page.on('pageerror',e=>errs.push(String(e)));
+     await page.goto(url,{waitUntil:'load'});
+     assert.match(await page.title(),/刷哪張/);
+     assert.equal(await page.locator('#main-plan').innerText(),'加入消費後試算');
+     async function assertNoOverflow(tag){const n=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);assert.ok(n<=1,engine+' '+name+' '+tag+' overflow: '+n)}
+     await assertNoOverflow('home');
+     // The reported iPhone bug must never silently fail to open a form.
+     await page.locator('#new-entry').click();
+     assert.equal(await page.locator('#entry-dialog').evaluate(d=>d.open),true);
+     const modal=await page.locator('#entry-dialog').boundingBox();
+     assert.ok(modal&&modal.y>=0&&modal.y+modal.height<=height+2,'dialog not within viewport: '+JSON.stringify(modal));
+     if(width<=390)assert.ok(modal.y>20,'mobile dialog should be bottom sheet');
+     await page.locator('#entry-store').fill('momo');
+     await page.locator('#entry-amount').fill('1200.5');
+     await page.locator('#save-entry').click();
+     assert.equal(await page.locator('#entry-dialog').evaluate(d=>d.open),false);
+     assert.equal(await page.locator('#tx-count').innerText(),'1');
+     // Regression: deferred focus used to revert edited amounts non-deterministically.
+     await page.locator('[data-edit]').first.click();
+     await page.locator('#entry-amount').fill('700');
+     await page.locator('#save-entry').click();
+     assert.match(await page.locator('#tx-summary').innerText(),/700/);
+     // Validate remaining form controls and transaction persistence.
+     await page.locator('#new-entry').click();
+     await page.locator('#entry-store').fill('50嵐');
+     await page.locator('#entry-amount').fill('150');
+     await page.locator('#entry-payment').selectOption('card');
+     await page.locator('#save-entry').click();
+     assert.equal(await page.locator('#tx-count').innerText(),'2');
+     await page.reload({waitUntil:'load'});
+     assert.equal(await page.locator('#tx-count').innerText(),'2');
+     await assertNoOverflow('with transactions');
+     const nav=view=>page.locator((width<=390?'.bottom-tabs ':'.top-tabs ')+'[data-view='+view+']');
+     await nav('settings').click();
+     assert.equal(await page.locator('#panel-settings').isVisible(),true);
+     await page.locator('#level').selectOption('2');
+     await page.locator('#line-linked').check();
+     await page.locator('#mile-value').fill('0.65');
+     await page.locator('#mile-value').dispatchEvent('change');
+     await assertNoOverflow('settings');
+     await nav('lookup').click();
+     assert.equal(await page.locator('#panel-lookup').isVisible(),true);
+     await page.locator('#lookup-search').fill('50嵐');
+     assert.match(await page.locator('#lookup-result').innerText(),/15 點|Richart/);
+     await page.locator('#lookup-amount').fill('250');
+     await page.locator('#lookup-add').click();
+     assert.equal(await page.locator('#tx-count').innerText(),'3');
+     await assertNoOverflow('lookup');
+     // Update checking must be a genuine, same-origin request.
+     await page.locator('#check-update').click();
+     await page.locator('#update-status').getByText(/已是最新版本/).waitFor();
+     await page.route('**/version.json?*',route=>route.fulfill({status:200,contentType:'application/json',body:'{"version":"2.2.0"}'}));
+     await page.locator('#check-update').click();
+     await page.locator('#update-banner').waitFor({state:'visible'});
+     await assertNoOverflow('update banner');
+     await page.screenshot({path:path.join(folder,engine+'-'+name+'-today.png'),fullPage:true});
+     await nav('lookup').click();await page.screenshot({path:path.join(folder,engine+'-'+name+'-lookup.png'),fullPage:true});
+     await nav('settings').click();await page.screenshot({path:path.join(folder,engine+'-'+name+'-settings.png'),fullPage:true});
+     assert.deepEqual(errs,[],'uncaught errors on '+engine+' '+name);
+     await context.close();
+     console.log(engine+' '+name+' passes: modal, form, edit, reload, settings, search, update and no overflow');
+    }
+   }finally{await browser.close()}
+  }
+ }finally{await new Promise(resolve=>server.close(resolve))}
 })().catch(e=>{console.error(e);process.exit(1)});

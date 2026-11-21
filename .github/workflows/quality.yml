@@ -19,13 +19,14 @@ jobs:
         run: |
           node --check rules.js
           node --check app.js
+          node --check updates.js
           node --check tests/browser.test.cjs
       - name: Reward calculation tests
         run: node --test tests/rules.test.cjs
       - name: Install browser test dependency
         run: |
           npm install --no-audit --no-fund --no-save playwright@1.56.1
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium webkit
       - name: Phone and tablet smoke tests
         run: node tests/browser.test.cjs
       - name: Upload viewport screenshots
