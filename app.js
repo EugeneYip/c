@@ -83,8 +83,8 @@ function lookup(){
  const richBest=rank[0];const choices=R.cardOptions(tx,richBest?.key||'daily',c,Number(c.lineBonusUsed)||0);
  const best=choices[0];const others=choices.filter(x=>x.card!==best?.card);
  out.innerHTML='<div class="lookup-result-head"><strong>'+esc(info.merchant?.name||tx.store)+'</strong><p>'+(info.merchant?'已收錄店家名稱，仍須核對分店及請款類別':info.assumed?'依自選通路類別估算，仍需確認 MCC':'未收錄官方通路，先以一般消費估算')+'</p></div>'+
- (best?'<div class="result-choice"><div>'+cardTag(best)+'<div class="details">'+esc(best.howToPay)+(best.paymentChange?'（需換付款方式）':'')+'</div></div><b>估值 $'+num(best.value)+'</b></div>':'<p class="muted small">沒有已核對的有效方案可比較。</p>')+
- '<div class="result-choice"><div><span class="chip orange">Richart 最佳切換</span><div class="details">'+esc(richBest?.label||'未核對')+'</div></div><b>'+num(richBest?.score.points||0)+' 點</b></div>'+
+ (best?'<div class="result-choice"><div>'+cardTag(best)+'<div class="details">'+(best.card==='richart'?'切換 '+esc(richBest?.label||'未核對')+' · ':'')+esc(best.howToPay)+(best.paymentChange?'（需換付款方式）':'')+'</div></div><b>估值 NT$ '+num(best.value)+'</b></div>':'<p class="muted small">沒有已核對的有效方案可比較。</p>')+
+ (best?.card==='richart'?'':'<div class="result-choice"><div><span class="chip orange">Richart 最佳切換</span><div class="details">'+esc(richBest?.label||'未核對')+'</div></div><b>'+num(richBest?.score.points||0)+' 點</b></div>')+
  others.map(x=>'<div class="result-choice"><div>'+cardTag(x)+'<div class="details">'+esc(x.howToPay)+'</div></div><b>NT$ '+num(x.value)+'</b></div>').join('')+
  '<p class="micro">以上以單筆回饋估算；若今日還有其他消費，Richart 全日最佳方案可能改變。'+(best?.paymentChange?'更換信用卡時請確認店家可直接刷卡。':'')+'</p>'+
  '<button type="button" class="lightbtn" id="toggle-favorite" style="margin-top:12px">'+(state.favorites.includes(term)?'從常用店家移除':'☆ 加入常用店家')+'</button>';
