@@ -56,3 +56,7 @@ test('PX Pay does not accidentally receive an ordinary card bonus',()=>{
   assert.equal(R.rich(t,'pay',setting).points,0);
   assert.equal(R.line(t,setting),null);
 });
+test('Shopee and POYA are searchable under canonical and alias names',()=>{
+  for(const name of ['蝦皮','蝦皮購物','Shopee','蝦皮商城'])assert.equal(R.identify(tx(name)).group,'digital',name);
+  for(const name of ['寶雅','POYA','寶雅生活館','寶雅線上買'])assert.equal(R.identify(tx(name)).group,'daily',name);
+});
