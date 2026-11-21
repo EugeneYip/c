@@ -8,15 +8,15 @@
 <meta name="referrer" content="no-referrer">
 <title>刷哪張？｜狐狸的回饋筆記</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css?v=2.4.0">
-<link rel="stylesheet" href="ux.css?v=2.4.0">
-<link rel="stylesheet" href="tight-v22.css?v=2.4.0">
-<link rel="stylesheet" href="rights.css?v=2.4.0">
-<link rel="stylesheet" href="compact-v24.css?v=2.4.0">
-<script src="rules.js?v=2.4.0" defer></script>
-<script src="engine-v22.js?v=2.4.0" defer></script>
-<script src="app.js?v=2.4.0" defer></script>
-<script src="benefits.js?v=2.4.0" defer></script>
+<link rel="stylesheet" href="styles.css?v=2.5.0">
+<link rel="stylesheet" href="ux.css?v=2.5.0">
+<link rel="stylesheet" href="tight-v22.css?v=2.5.0">
+<link rel="stylesheet" href="rights.css?v=2.5.0">
+<link rel="stylesheet" href="compact-v24.css?v=2.5.0">
+<script src="rules.js?v=2.5.0" defer></script>
+<script src="engine-v22.js?v=2.5.0" defer></script>
+<script src="app.js?v=2.5.0" defer></script>
+<script src="benefits.js?v=2.5.0" defer></script>
 </head>
 <body>
 <a href="#main" class="skip">跳至主要內容</a>
@@ -26,7 +26,7 @@
       <span class="foxmark" aria-hidden="true"><svg viewBox="0 0 72 72"><path fill="#fffcf7" d="M11 15 24 22Q36 18 48 22L61 15 59 44Q56 58 36 63 16 58 13 44Z"/><path fill="#f9a258" d="M10 13 26 25 36 20 46 25 62 13 58 47 47 60 36 64 25 60 14 47Z"/><path fill="#fffaf1" d="M14 39 30 47 36 54 42 47 58 39 55 52 46 60 36 64 26 60 17 52Z"/><ellipse cx="26" cy="39" rx="2.5" ry="3.2" fill="#543324"/><ellipse cx="46" cy="39" rx="2.5" ry="3.2" fill="#543324"/><path d="m32 53 4 4 4-4Z" fill="#543324"/></svg></span>
       <span><strong>刷哪張？</strong><small>狐狸的回饋筆記</small></span>
     </a>
-    <div class="header-actions"><button type="button" id="check-update" class="update-link" aria-label="檢查信用卡權益更新">檢查權益</button><span class="release"><span class="status-dot"></span> V2.4</span></div>
+    <div class="header-actions"><button type="button" id="check-update" class="update-link" aria-label="檢查信用卡權益更新">檢查權益</button><span class="release"><span class="status-dot"></span> V2.5</span></div>
   </div>
   <div class="welcome">
     <div class="welcome-text"><h1>今天刷哪張？</h1><p>Richart 優先，逐筆比較三張卡。</p></div>
@@ -84,7 +84,7 @@
   <section data-panel="lookup" id="panel-lookup" class="screen" hidden>
     <div class="screen-heading"><h2>店家速查</h2><p class="muted">輸入商家、金額，直接看應選哪張卡與付款方式。</p></div>
     <div class="lookup-grid"><div class="panel">
-      <label for="lookup-search">要在哪裡消費？</label><input id="lookup-search" type="search" placeholder="輸入：momo、50嵐、7-ELEVEN…" autocomplete="off">
+      <label for="lookup-search">要在哪裡消費？</label><input id="lookup-search" type="search" placeholder="輸入：蝦皮、寶雅、高鐵、momo…" autocomplete="off">
       <div id="lookup-suggestions" class="suggestions"></div>
       <div class="quicklist"><p class="micro">快速搜尋常見通路</p><div id="popular-shops" class="quick-merchant-row" role="group" aria-label="熱門通路捷徑"></div><p class="micro">我的常用店家</p><div id="favorites" class="chips"></div></div>
     </div><div class="panel">
@@ -114,10 +114,10 @@
     </section>
   </section>
   <section data-panel="settings" id="panel-settings" class="screen" hidden>
-    <div class="screen-heading"><h2>我的設定</h2><p class="muted">確認卡片資格及個人估值；設定僅存在這台裝置。</p></div>
+    <div class="screen-heading"><h2>我的設定</h2><p class="muted">確認卡片資格及個人估值；首次使用預設為主要使用者的設定；之後以這台裝置的個人修改為準。</p></div>
     <div class="settings-grid"><section class="panel">
       <h3 class="mini-title">Richart 資格</h3>
-      <label for="level">回饋等級</label><select id="level"><option value="1">LEVEL 1（未確認自動扣繳資格）</option><option value="2">LEVEL 2（已確認生效）</option></select>
+      <label for="level">回饋等級</label><select id="level"><option value="1">LEVEL 1（預設；未確認自動扣繳資格）</option><option value="2">LEVEL 2（已確認生效）</option></select>
       <p class="micro">設定自動扣繳須等次期帳單結帳後才可能符合 LEVEL 2；新戶另有期限條件。</p>
       <label class="check"><input id="bonus-cap" type="checkbox"><span>本期已用完 Richart 加碼消費額度</span></label>
       <label class="check"><input id="holiday" type="checkbox"><span>此日期已查證為臺灣國定假日（平日才需要）</span></label>
@@ -125,11 +125,11 @@
     </section><section class="panel">
       <h3 class="mini-title">其他兩張卡</h3>
       <label class="check"><input id="card-line" type="checkbox" checked><span>納入中信 LINE Pay 卡比較</span></label>
-      <label class="check"><input id="line-linked" type="checkbox"><span>已綁定有效的臺灣 LINE Pay 帳號</span></label>
+      <label class="check"><input id="line-linked" type="checkbox"><span>已綁定有效的臺灣 LINE Pay 帳號（預設勾選，請自行確認）</span></label>
       <label class="check"><input id="line-bonus" type="checkbox"><span>已完成 2026 年第 4 季海外加碼登錄</span></label>
       <label for="line-used">LINE Pay 海外加碼已領點數（上限 450）</label><input id="line-used" type="number" value="0" min="0" max="450">
       <label class="check"><input id="card-air" type="checkbox" checked><span>納入中信中華航空商務御璽卡比較</span></label>
-      <label for="birth-month">華航聯名卡正卡人生日月份（選填）</label><select id="birth-month"><option value="0">不套用生日加碼</option><option value="1">1 月</option><option value="2">2 月</option><option value="3">3 月</option><option value="4">4 月</option><option value="5">5 月</option><option value="6">6 月</option><option value="7">7 月</option><option value="8">8 月</option><option value="9">9 月</option><option value="10">10 月</option><option value="11">11 月</option><option value="12">12 月</option></select>
+      <label for="birth-month">華航聯名卡正卡人生日月份（預設 5 月，可修改）</label><select id="birth-month"><option value="0">不套用生日加碼</option><option value="1">1 月</option><option value="2">2 月</option><option value="3">3 月</option><option value="4">4 月</option><option value="5">5 月</option><option value="6">6 月</option><option value="7">7 月</option><option value="8">8 月</option><option value="9">9 月</option><option value="10">10 月</option><option value="11">11 月</option><option value="12">12 月</option></select>
     </section><section class="panel">
       <h3 class="mini-title">價值換算</h3><p class="micro">僅供比較，不代表點數可向銀行兌換成現金。</p>
       <div class="form-grid"><div><label for="mile-value">每華航哩估值（NT$）</label><input id="mile-value" type="number" min="0" max="5" step=".05" value=".4"></div><div><label for="line-value">每 LINE POINTS 估值（NT$）</label><input id="line-value" type="number" min="0" max="5" step=".1" value="1"></div><div class="full"><label for="foreign-fee">海外刷卡手續費假設（%）</label><input id="foreign-fee" type="number" min="0" max="10" step=".1" value="1.5"></div></div>
