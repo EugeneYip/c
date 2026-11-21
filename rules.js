@@ -20,14 +20,14 @@ add("詹記麻辣火鍋|萬客什鍋|海底撈|屋馬燒肉|茶六燒肉堂|新�
 add("饗饗|NAGOMI","food",5);
 add("Netflix|Disney+|巴哈姆特|BOOK WALKER|Animate|樂天KOBO|Readmoo讀墨|愛爾達","digital",5);
 add("Pinkoi","general",5);
-add("蝦皮|淘寶|酷澎~Coupang","digital",3.3);
+add("蝦皮~蝦皮購物~Shopee~蝦皮商城~蝦皮官方旗艦店|淘寶|酷澎~Coupang","digital",3.3);
 add("Uber Eats~Ubereats","food",3.3);
 add("Adidas|New Balance|PUMA|Onitsuka Tiger|Nike|HOKA|Salomon|lululemon","general",5);
 add("Anytime Fitness|健身工廠|World Gym|超核心 Hypercore|KX PILATES|17FIT","general",5);
 add("好好生醫|POPCARE好在乎|營養師輕食|VITABOX|MYPROTEIN|UrMart","general",5);
 add("momo|PChome|Amazon|東森購物|博客來|Richart Mart|PayEasy|iHerb|SHEIN|Farfetch|Olive Young|Steam|PlayStation|Nintendo|ChatGPT|Notion|Canva|Perplexity|Claude|Hahow|PressPlay|Amazing Talker","digital");
 add("新光三越|遠東百貨|遠東SOGO|漢神百貨|微風廣場|台北101|遠東巨城|南紡購物中心|誠品生活|京站|三創生活|夢時代|統一時代|中友百貨|LaLaport|MITSUI OUTLET PARK|華泰名品城|SKM Park|IKEA|特力屋|HOLA|宜得利|UNIQLO|GU|ZARA|NET","large");
-add("唐吉訶德|LOPIA|萬家福|大買家|寶雅|康是美|屈臣氏|杏一醫療|大樹藥局|丁丁藥局|臺鐵|高鐵|台灣大車隊|LINEGO|Yoxi|中油直營|全國加油|美廉社","daily");
+add("唐吉訶德|LOPIA|萬家福|大買家|寶雅~POYA~寶雅生活館~寶雅線上買|康是美|屈臣氏|杏一醫療|大樹藥局|丁丁藥局|臺鐵|高鐵|台灣大車隊|LINEGO|Yoxi|中油直營|全國加油|美廉社","daily");
 add("foodpanda|拓元售票|KKTIX|年代售票|寬宏售票|OPENTIX|FunNow|錢櫃|好樂迪","food");
 add("中華航空~華航|長榮航空|星宇航空|台灣虎航|國泰航空|華信航空|立榮航空|樂桃航空|阿聯酋航空|亞洲航空|酷航|日本航空|Klook|KKday|Agoda|Booking.com|Trip.com|Airbnb|Hotels.com|Expedia|雄獅旅遊|易遊網|東南旅遊|可樂旅遊","travel");
 const norm=s=>String(s||"").toLocaleLowerCase().normalize("NFKC").replace(/[\s·．。()（）\-_,，、]/g,"");
