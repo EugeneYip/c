@@ -71,9 +71,10 @@ function line(tx,s,used=0){
 function air(tx,s){
  if(s.cards?.air===false||!valid(s.date,"2026-01-01","2026-12-31"))return null;
  const {group}=identify(tx);if(group==="excluded")return output("air",0,0,"保守以不回饋估算",tx,s,{uncertain:true});
- const physical=["card","apple"].includes(tx.method)&&["abroad","europe"].includes(tx.region),birthday=Number(s.birthdayMonth)>0&&Number(s.birthdayMonth)===Number(s.date.slice(5,7));
- const mult=physical&&birthday?3:tx.airDouble?2:1,points=Math.floor(tx.amount/30+1e-8)*mult;
- return output("air",points,mult*100/30,mult===3?"生日當月海外實體 3 倍":mult===2?"自行確認指定消費 2 倍":"一般 NT$30／1 哩",tx,s,{uncertain:tx.airDouble||group==="convenience"||group==="insurance",source:SOURCES.air});
+ if(tx.region==="europe")return output("air",0,0,"指定歐洲地區實體交易不回饋（商務御璽卡）",tx,s,{uncertain:false,source:SOURCES.air});
+ const physical=["card","apple"].includes(tx.method)&&tx.region==="abroad",birthday=Number(s.birthdayMonth)>0&&Number(s.birthdayMonth)===Number(s.date.slice(5,7));
+ const mult=physical&&birthday?3:(physical||tx.airDouble)?2:1,points=Math.floor(tx.amount/30+1e-8)*mult;
+ return output("air",points,mult*100/30,mult===3?"生日當月海外實體 3 倍":mult===2?(physical?"海外實體一般 2 倍":"已確認指定消費 2 倍"):"一般 NT$30／1 哩",tx,s,{uncertain:tx.airDouble||group==="convenience"||group==="insurance",source:SOURCES.air});
 }
 function compare(tx,plan,s,used=0){
  return [rich(tx,plan,s),line(tx,s,used),air(tx,s)].filter(Boolean).sort((a,b)=>b.value-a.value||Number(b.card==="richart")-Number(a.card==="richart")||a.card.localeCompare(b.card));
