@@ -66,6 +66,15 @@ const path=require('node:path');
      await page.locator('#show-rich').click();
      const nav=view=>page.locator((width<=390?'.bottom-tabs ':'.top-tabs ')+'[data-view='+view+']');
      await nav('settings').click();
+     // First-visit defaults mirror the primary user's supplied Settings screenshot.
+     assert.equal(await page.locator('#level').inputValue(),'1');
+     assert.equal(await page.locator('#line-linked').isChecked(),true);
+     assert.equal(await page.locator('#line-bonus').isChecked(),false);
+     assert.equal(await page.locator('#line-used').inputValue(),'0');
+     assert.equal(await page.locator('#card-line').isChecked(),true);
+     assert.equal(await page.locator('#card-air').isChecked(),true);
+     assert.equal(await page.locator('#birth-month').inputValue(),'5');
+
      assert.equal(await page.locator('#panel-settings').isVisible(),true);
      await page.locator('#level').selectOption('2');
      await page.locator('#line-linked').check();
@@ -73,6 +82,12 @@ const path=require('node:path');
      await page.locator('#mile-value').dispatchEvent('change');
      await assertNoOverflow('settings');
      await nav('lookup').click();
+     for(const merchant of ['蝦皮','寶雅']){
+       await page.locator('#popular-shops [data-quick="'+merchant+'"]').click();
+       assert.equal(await page.locator('#lookup-search').inputValue(),merchant);
+       assert.ok((await page.locator('#lookup-result').innerText()).length>20);
+     }
+
      assert.equal(await page.locator('#panel-lookup').isVisible(),true);
      await page.locator('#lookup-search').fill('50嵐');
      assert.match(await page.locator('#lookup-result').innerText(),/15 點|Richart/);
