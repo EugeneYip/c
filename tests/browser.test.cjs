@@ -28,6 +28,14 @@ const path=require('node:path');
      page.on('pageerror',e=>errs.push(String(e)));
      await page.goto(url,{waitUntil:'load'});
      assert.match(await page.title(),/刷哪張/);
+     assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
+     await page.locator('#theme-toggle').click();
+     assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+     await page.reload({waitUntil:'load'});
+     assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+     await page.locator('#theme-toggle').click();
+     assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
+
      assert.equal((await page.locator('#entry-payment').innerText()).includes('Google'),false);
      assert.equal(await page.locator('#show-all').innerText(),'逐筆選最佳卡');
      assert.equal(await page.locator('#main-plan').innerText(),'開始記錄消費');
@@ -66,6 +74,11 @@ const path=require('node:path');
      await page.locator('#show-rich').click();
      const nav=view=>page.locator((width<=390?'.bottom-tabs ':'.top-tabs ')+'[data-view='+view+']');
      await nav('settings').click();
+     await page.locator('#theme-choice').selectOption('dark');
+     assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+     await page.locator('#theme-choice').selectOption('light');
+     assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
+
      // First-visit defaults mirror the primary user's supplied Settings screenshot.
      assert.equal(await page.locator('#level').inputValue(),'1');
      assert.equal(await page.locator('#line-linked').isChecked(),true);
