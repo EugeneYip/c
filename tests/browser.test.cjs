@@ -43,7 +43,7 @@ const path=require('node:path');
      assert.equal(await page.locator('#entry-dialog').evaluate(d=>d.open),false);
      assert.equal(await page.locator('#tx-count').innerText(),'1');
      // Regression: deferred focus used to revert edited amounts non-deterministically.
-     await page.locator('[data-edit]').first.click();
+     await page.locator('[data-edit]').first().click();
      await page.locator('#entry-amount').fill('700');
      await page.locator('#save-entry').click();
      assert.match(await page.locator('#tx-summary').innerText(),/700/);
