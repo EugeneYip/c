@@ -121,7 +121,7 @@ const path=require('node:path');
      await page.route(remote,route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(changed)}));
      await page.locator('#benefits-refresh').click();
      await page.locator('#benefit-check-summary').getByText(/疑似官方公告變更/).waitFor();
-     await page.locator('#source-details summary').click();
+     await page.locator('#source-details > summary').click();
      assert.match(await page.locator('#benefit-check-list').innerText(),/疑似公告內容變動/);
      await page.screenshot({path:path.join(folder,engine+'-'+name+'-benefits.png'),fullPage:true});
      await nav('today').click();
