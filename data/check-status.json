@@ -1,8 +1,86 @@
 {
   "schemaVersion": 1,
-  "checkedAt": null,
+  "checkedAt": "2026-11-21T05:03:06Z",
   "manualReviewedAt": "2026-11-21",
-  "method": "Public page text monitoring has not yet completed. Results cannot guarantee live eligibility.",
-  "sources": [],
-  "summary": {"unchanged": 0, "baseline": 0, "changed": 0, "errors": 0}
+  "method": "Official website text fingerprint; detects differences, never authorizes changed rewards.",
+  "sources": [
+    {
+      "id": "richart",
+      "name": "Richart 權益及注意事項",
+      "url": "https://mkp.taishinbank.com.tw/TsCms/marketing/expose/WM_20261103171652257/index.html",
+      "status": "baseline",
+      "lastSuccessAt": "2026-11-21T05:03:06Z",
+      "diff": {
+        "added": [],
+        "removed": []
+      },
+      "hash": "ddc5ab65814371d8df34accf685dbdc0952bb27e2466191f6156f66b0bc9a7bf"
+    },
+    {
+      "id": "line_rules",
+      "name": "中信 LINE Pay 回饋計畫",
+      "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/notice.html",
+      "status": "baseline",
+      "lastSuccessAt": "2026-11-21T05:03:06Z",
+      "diff": {
+        "added": [],
+        "removed": []
+      },
+      "hash": "acd1f52f75542ebc2f4d9bcdf3b63c06c0aebcfbab72b83da420e863b0e65c80"
+    },
+    {
+      "id": "line_offers",
+      "name": "中信 LINE Pay 指定店家優惠",
+      "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/store.html",
+      "status": "baseline",
+      "lastSuccessAt": "2026-11-21T05:03:06Z",
+      "diff": {
+        "added": [],
+        "removed": []
+      },
+      "hash": "c318ca98a84cdeb50962f9105e3f2307e5965f6a55d5b88fbc023f98e3852c6a"
+    },
+    {
+      "id": "line_travel",
+      "name": "中信 LINE Pay 旅遊加碼",
+      "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/page_travel.html",
+      "status": "baseline",
+      "lastSuccessAt": "2026-11-21T05:03:06Z",
+      "diff": {
+        "added": [],
+        "removed": []
+      },
+      "hash": "092b6e19b132e6f8558b18af0cb6f7e215e2848c54c095b8fa58e79f23b02e09"
+    },
+    {
+      "id": "air_rules",
+      "name": "中信華航哩程與加碼",
+      "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/index.html",
+      "status": "baseline",
+      "lastSuccessAt": "2026-11-21T05:03:06Z",
+      "diff": {
+        "added": [],
+        "removed": []
+      },
+      "hash": "922d06fbd2dc6960e4f2963f841dc52821056457da64e8be38cf60d639565597"
+    },
+    {
+      "id": "air_perks",
+      "name": "中信華航卡別福利",
+      "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/feature.html",
+      "status": "baseline",
+      "lastSuccessAt": "2026-11-21T05:03:06Z",
+      "diff": {
+        "added": [],
+        "removed": []
+      },
+      "hash": "0fc89d2f1bf9ca9816dbc237a4ebb60bc4d4d5a95c9b6067bb7aaaa45a269ff1"
+    }
+  ],
+  "summary": {
+    "unchanged": 0,
+    "baseline": 6,
+    "changed": 0,
+    "errors": 0
+  }
 }
