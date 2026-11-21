@@ -68,3 +68,59 @@
  .header-actions .update-link:not(#theme-toggle){font-size:11px;min-height:32px;padding:4px 7px}
  .header-actions .release{font-size:10px;padding:4px 6px}
 }
+
+/* v2.6.1 visual QA: fix hardcoded light surfaces and contrast, including empty state. */
+:root[data-theme="dark"] .hero-card{
+ background:linear-gradient(130deg,#573421 0%,#492d22 65%,#3a2822 100%);
+ border-color:#8a5637;color:#f7e8d9;
+}
+:root[data-theme="dark"] .hero-card .hero-kicker,
+:root[data-theme="dark"] .hero-card h2{color:#ffd2a8}
+:root[data-theme="dark"] .hero-card .hero-description,
+:root[data-theme="dark"] .hero-card .hero-metrics span,
+:root[data-theme="dark"] .hero-card .hero-foot{color:#e9c4a6}
+:root[data-theme="dark"] .hero-card .hero-metrics strong{color:#fff5e8}
+:root[data-theme="dark"] .hero-card .hero-divider{background:#936344}
+:root[data-theme="dark"] .hero-card:after{border-color:rgba(255,170,104,.09)}
+:root[data-theme="dark"] .empty-state{background:#302922;color:#f5e9df;border:1px dashed #74543c}
+:root[data-theme="dark"] .empty-state strong{color:#fff2e6}
+:root[data-theme="dark"] .empty-state p{color:#d7c1b1}
+:root[data-theme="dark"] .soft-count{background:#503323;color:#ffbc8e}
+:root[data-theme="dark"] .view-switch{background:#37312d}
+:root[data-theme="dark"] .view-switch button{color:#d3c3b6}
+:root[data-theme="dark"] .view-switch button.selected{background:#63402b;color:#ffe2c6;box-shadow:none}
+:root[data-theme="dark"] .rank-row .rname,
+:root[data-theme="dark"] .rank-row .rnum{color:#ded0c5}
+:root[data-theme="dark"] .rank-row.best .rname,
+:root[data-theme="dark"] .rank-row.best .rnum{color:#ffbb88}
+:root[data-theme="dark"] .compare-row{background:#2e2925}
+:root[data-theme="dark"] .card-tag.richart,
+:root[data-theme="dark"] .chip.orange{background:#56331f;color:#ffc28e}
+:root[data-theme="dark"] .card-tag.line,
+:root[data-theme="dark"] .card-tag.air{background:#35312d;color:#e6d6c9}
+:root[data-theme="dark"] .daybadge{background:#3e332d;color:#ead0bd}
+:root[data-theme="dark"] .tx-bottom{color:#c1afa2}
+:root[data-theme="dark"] .bottom-tabs button{background:transparent}
+:root[data-theme="dark"] .bottom-tabs button.active{background:#50301f;color:#ffbf91}
+:root[data-theme="dark"] .bottom-tabs{box-shadow:0 -5px 18px #0005}
+:root[data-theme="dark"] .primary{background:#c75b25;color:#fff}
+:root[data-theme="dark"] .primary:hover{background:#d56b32}
+:root[data-theme="dark"] .sheet-head,
+:root[data-theme="dark"] .sheet-actions{background:#252322;color:#f4eee8;border-color:#49413c}
+:root[data-theme="dark"] .suggestions{background:#292522;color:#f4eee8}
+:root[data-theme="dark"] .suggestions button:hover{background:#493429}
+:root[data-theme="dark"] .source-row a,
+:root[data-theme="dark"] .benefit-item a{color:#ffbb8c}
+:root[data-theme="dark"] .footer{color:#bcaea3}
+:root[data-theme="dark"] button:focus-visible,
+:root[data-theme="dark"] a:focus-visible,
+:root[data-theme="dark"] input:focus-visible,
+:root[data-theme="dark"] select:focus-visible{outline:3px solid #ffba81;outline-offset:2px}
+@media(max-width:390px){
+ .identity strong{font-size:17px}
+ .identity small{font-size:9px}
+ .foxmark{width:36px;height:36px}
+ .header-actions{gap:3px}
+ #theme-toggle{font-size:0;min-width:36px;padding:5px}
+ #theme-toggle::first-letter{font-size:17px}
+}
