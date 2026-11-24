@@ -39,12 +39,13 @@ function ranking(result){
  $("show-rich").setAttribute('aria-pressed',String(mode==="rich"));$("show-all").setAttribute('aria-pressed',String(mode==="all"));
 }
 function cardTag(c){return '<span class="card-tag '+esc(c.card)+'">'+esc(R.CARDS[c.card])+'</span>'}
+function requiresSeparateReview(tx){return ['ipass','easycard','pxpay'].includes(tx.method)||['excluded','transit'].includes(R.identify(tx).group)}
 function comparison(result){
  if(!rows().length){$("compare-list").innerHTML='<p class="muted small">新增消費後，這裡會顯示每筆適合的卡片與付款方式。</p>';$("warning-box").hidden=true;return}
  $("compare-list").innerHTML='<p class="micro">以 Richart「'+esc(result.recommended.label)+'」為當日方案，比較每筆最適合的一張卡。</p>'+result.recommended.rec.map(({tx,chosen,options})=>{
    const opts=options.filter((o,i,a)=>a.findIndex(z=>z.card===o.card&&z.payment===o.payment)===i);
    return '<article class="compare-row"><div class="compare-top"><div><strong>'+esc(tx.store)+'</strong><div class="micro">消費 NT$ '+num(tx.amount)+'</div></div><div>'+(chosen?cardTag(chosen):'<span class="chip">待核對</span>')+'</div></div>'+
-   (chosen?'<div class="compare-numbers"><b>'+num(chosen.points)+' '+esc(chosen.unit)+'</b> · 估值 NT$ '+num(chosen.value)+'</div><div class="compare-note">怎麼付：'+esc(chosen.howToPay)+'</div>':'<div class="compare-numbers">所選日期沒有已核對的回饋規則。</div>')+
+   (chosen?'<div class="compare-numbers"><b>'+num(chosen.points)+' '+esc(chosen.unit)+'</b> · 估值 NT$ '+num(chosen.value)+'</div><div class="compare-note">怎麼付：'+esc(chosen.howToPay)+'</div>':'<div class="compare-numbers">'+(requiresSeparateReview(tx)?'此交易需依電子票證或特殊通路規則另行確認，不列入一般選卡推薦。':'所選日期沒有已核對的回饋規則。')+'</div>')+
    '<details class="compare-details"><summary>回饋依據及其他選項</summary><p>'+(chosen?esc(chosen.reason):'無適用的已核對規則')+'</p>'+
    (chosen?.paymentChange?'<p>注意：'+esc(chosen.note)+'</p>':'')+
    '<p>'+opts.map(o=>esc(R.CARDS[o.card])+'｜'+esc(o.paymentName)+'｜'+num(o.points)+' '+esc(o.unit)+(o.uncertain?'（需核對）':'')).join('<br>')+'</p></details></article>';
@@ -61,11 +62,11 @@ function comparison(result){
  const el=$("warning-box");el.hidden=!notes.length;el.innerHTML=notes.length?'<details><summary>試算限制與待確認項目（'+notes.length+'）</summary>'+notes.map(n=>'<p>• '+esc(n)+'</p>').join('')+'</details>':'';
 }
 function render(){
- dayBadge();transactions();const arr=rows(),data=R.optimize(arr,cfg()),known=data.recommended.rec.some(x=>x.options.length>0);
- $("main-plan").textContent=arr.length?(known&&arr.some(tx=>R.rich(tx,"daily",cfg()))?data.richOnly.label:'權益期間未核對'):'開始記錄消費';
+ dayBadge();transactions();const arr=rows(),data=R.optimize(arr,cfg()),known=data.recommended.rec.some(x=>x.options.length>0),richKnown=arr.some(tx=>!requiresSeparateReview(tx)&&R.rich(tx,'daily',cfg())),allSpecial=arr.length>0&&arr.every(requiresSeparateReview);
+ $("main-plan").textContent=arr.length?(richKnown?data.richOnly.label:allSpecial?'需另查回饋':'權益期間未核對'):'開始記錄消費';
  $("main-total").textContent=arr.length&&known?'NT$ '+num(data.recommended.total):'—';
- $("rich-only").textContent=arr.length&&arr.some(tx=>R.rich(tx,"daily",cfg()))?num(data.richOnly.points)+' 點':'—';
- $("main-explain").textContent=arr.length?(known?'依 '+arr.length+' 筆消費計算，Richart 當日只需切換一次。':'查無這天已核對的有效權益。'):'加入消費，查看今天最適合的 Richart 方案。';
+ $("rich-only").textContent=arr.length&&richKnown?num(data.richOnly.points)+' 點':'—';
+ $("main-explain").textContent=arr.length?(known?'依 '+arr.length+' 筆消費計算，Richart 當日只需切換一次。':allSpecial?'電子票證或特殊通路需依各自條件確認。':'查無這天已核對的有效權益。'):'加入消費，查看今天最適合的 Richart 方案。';
  ranking(data);comparison(data);if(!$("panel-lookup").hidden)lookup();
 }
 const suggestions=q=>q.trim()?R.merchants(q,6).map(m=>'<button type="button" data-merchant="'+esc(m.name)+'">'+esc(m.name)+'</button>').join(""):"";
@@ -83,7 +84,7 @@ function lookup(){
  const info=R.identify(tx),c=cfg(),g=info.group;
  const ranking=R.PLANS.map(([key,label])=>({key,label,score:R.rich(tx,key,c)})).filter(x=>x.score).sort((a,b)=>b.score.points-a.score.points);
  const richBest=ranking[0],options=R.cardOptions(tx,richBest?.key||'daily',c,Number(c.lineBonusUsed)||0);
- const best=options[0],others=options.filter((x,i,a)=>x.card!==best?.card&&a.findIndex(z=>z.card===x.card)===i);
+ const best=options[0],others=options.filter((x,i,a)=>x.card!=='richart'&&x.card!==best?.card&&a.findIndex(z=>z.card===x.card)===i);
  let notice='';
  const extra=(label,text,url)=>'<div class="merchant-advice"><b>'+esc(label)+'</b><p>'+esc(text)+'</p>'+(url?'<a href="'+url+'" target="_blank" rel="noopener noreferrer">查看官方條款</a>':'')+'</div>';
  if(g==='transit'){
@@ -96,7 +97,7 @@ function lookup(){
  } else if(/家樂福|Carrefour|萬家福|樂家康/i.test(tx.store)){
   notice+=extra('量販店名稱及請款認列','家樂福及相關更名通路見於 Richart 天天刷的官方公告。不同網路購物、專櫃或更名後請款資訊仍可能影響指定回饋，建議先核對實際刷卡商店名稱。','https://mobile.richart.tw/TSDIB_RichartWeb/card/credit-card');
  }
- const noBasic=['excluded','transit'].includes(g);
+ const noBasic=requiresSeparateReview(tx);
  out.innerHTML='<div class="lookup-result-head"><strong>'+esc(info.merchant?.name||tx.store)+'</strong><p>'+(info.merchant?'已收錄店家名稱，仍須核對分店及請款類別':info.assumed?'依自選通路類別估算，仍需確認 MCC':'尚無指定通路比對，先以一般消費保守試算')+'</p></div>'+notice+
  (noBasic?'<div class="result-choice"><div><strong>一般刷卡回饋暫不計算</strong><div class="details">需核對特約活動或電子票證累計規則；勿直接套用一般回饋率。</div></div><b>—</b></div>':(best?'<div class="result-choice"><div>'+cardTag(best)+'<div class="details">'+(best.card==='richart'?'切換 '+esc(richBest?.label||'未核對')+' · ':'')+esc(best.howToPay)+(best.paymentChange?'（需更換付款方式）':'')+'</div></div><b>估值 NT$ '+num(best.value)+'</b></div>':'<p class="muted small">指定日期沒有已核對的有效回饋。</p>'))+
  (noBasic?'':(best?.card==='richart'||!richBest?'':'<div class="result-choice"><div><span class="chip orange">Richart 最佳切換</span><div class="details">'+esc(richBest?.label||'未核對')+'</div></div><b>'+num(richBest?.score.points||0)+' 點</b></div>'))+

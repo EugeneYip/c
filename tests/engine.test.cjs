@@ -21,6 +21,8 @@ test('dynamic programming honors scarce overseas LINE bonus cap and distinguishe
 test('four payment routes remain distinct when alternative card is not supported',()=>{const cases=['taishin','plus','full','other'];for(const method of cases){const x=tx('海外店',5000,method,'general','abroad');assert.equal(R.line(x,cfg()),null);assert.equal(R.air(x,cfg()),null);assert.ok(R.cardOptions(x,'pay',cfg()).some(o=>o.card!=='richart'&&o.payment==='card'&&o.paymentChange))}});
 test('no double-applied points on overseas transaction, values are finite',()=>{const x=tx('海外餐廳',3000,'card','food','abroad'),v=R.optimize([x],cfg({lineBonus:true}));assert.ok(v.recommended.rec[0].chosen.points>=0);assert.ok(Number.isFinite(v.recommended.total))});
 
-test('Stored-value payment must not automatically be replaced with a direct card',()=>{for(const method of ['ipass','easycard','pxpay'])assert.ok(R.cardOptions(tx('一般店',1000,method),'daily',cfg()).every(x=>x.card==='richart'&&x.points===0))});
+test('Stored-value payment must not automatically be replaced with a direct card',()=>{for(const method of ['ipass','easycard','pxpay'])assert.equal(R.cardOptions(tx('一般店',1000,method),'daily',cfg()).length,0)});
 test('Insurance uses shared Richart bonus cap',()=>{assert.equal(R.rich(tx('保費',1000,'card','insurance'),'daily',cfg({bonusCapReached:true})).points,3)});
 test('Invalid calendar dates are rejected',()=>{assert.equal(R.valid('2026-11-31','2026-07-01','2027-12-31'),false);assert.equal(R.valid('2026-11-30','2026-07-01','2027-12-31'),true)});
+
+test('Excluded and unverified transit transactions do not receive a recommended card',()=>{for(const store of ['全聯','臺北捷運']){const t=tx(store,1000);assert.equal(R.cardOptions(t,'daily',cfg()).length,0);assert.equal(R.optimize([t],cfg()).recommended.rec[0].chosen,null)}});

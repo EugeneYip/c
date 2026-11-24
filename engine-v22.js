@@ -22,9 +22,9 @@ function decorate(score,tx,method,changed){
 }
 function variants(tx,plan,s,used=0){
  const arr=[];
+ if(storedValue.includes(tx.method)||['excluded','transit'].includes(R.identify(tx).group))return arr;
  const rich=decorate(R.rich(tx,plan,s),tx,tx.method,false);
  if(rich)arr.push(rich);
- if(storedValue.includes(tx.method))return arr;
  if(s.cards?.line!==false){
    const methods=usableDirect.includes(tx.method)?[tx.method]:tx.method==='linepay'?['linepay','card']:['card'];
    for(const method of methods){

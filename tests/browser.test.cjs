@@ -35,6 +35,9 @@ const path=require('node:path');
      assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
      await page.reload({waitUntil:'load'});
      assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+     async function contrast(selector,minimum=4.5,hero=false){const result=await page.locator(selector).first().evaluate((e,{hero})=>{const rgb=s=>s.match(/[\d.]+/g)?.map(Number)||[0,0,0];const lum=a=>a.slice(0,3).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0);const fg=rgb(getComputedStyle(e).color);let bg=hero?[87,52,33]:null;for(let n=e;!bg&&n;n=n.parentElement){const a=rgb(getComputedStyle(n).backgroundColor);if(a.length===3||a[3]===1)bg=a;}const x=lum(fg),y=lum(bg||[23,23,23]);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}, {hero});assert.ok(result>=minimum,selector+' contrast '+result.toFixed(2)+' < '+minimum)}
+     await contrast('#main-plan',4.5,true);await contrast('.hero-description',4.5,true);await contrast('#empty-tx strong');await contrast('#empty-tx p');
+     await page.screenshot({path:path.join(folder,engine+'-'+name+'-dark-empty.png'),fullPage:true});
      await page.locator('#theme-toggle').click();
      assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
 
@@ -161,7 +164,7 @@ const path=require('node:path');
      await nav('settings').click();
      await page.screenshot({path:path.join(folder,engine+'-'+name+'-settings.png'),fullPage:true});
      await page.locator('#theme-choice').selectOption('dark');
-     for(const view of ['today','lookup','benefits','settings']){await nav(view).click();await assertNoOverflow('dark '+view);await page.screenshot({path:path.join(folder,engine+'-'+name+'-dark-'+view+'.png'),fullPage:true});}
+     for(const view of ['today','lookup','benefits','settings']){await nav(view).click();await assertNoOverflow('dark '+view);if(view==='today'){await contrast('.rank-row .rname');await contrast('.rank-row .rnum');await contrast('.compare-numbers b');}if(view==='lookup'){await contrast('label[for="lookup-amount"]');await contrast('.lookup-result-head strong');}if(view==='benefits'){await contrast('.benefit-row strong');await contrast('.benefit-headline');}if(view==='settings'){await contrast('label[for="level"]');await contrast('.check');}await page.screenshot({path:path.join(folder,engine+'-'+name+'-dark-'+view+'.png'),fullPage:true});}
      await page.emulateMedia({colorScheme:'dark'});
      await page.locator('#theme-choice').selectOption('system');
      assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
