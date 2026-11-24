@@ -44,7 +44,7 @@ const path=require('node:path');
      assert.equal((await page.locator('#entry-payment').innerText()).includes('Google'),false);
      assert.equal(await page.locator('#show-all').innerText(),'逐筆選最佳卡');
      assert.equal(await page.locator('#main-plan').innerText(),'開始記錄消費');
-     async function assertNoOverflow(tag){const n=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);assert.ok(n<=1,engine+' '+name+' '+tag+' overflow: '+n)}
+     async function assertNoOverflow(tag){const n=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);if(n>1){const offenders=await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.width&&r.right>innerWidth+1&&!e.closest('.quick-merchant-row')}).map(e=>({tag:e.tagName,id:e.id,cls:String(e.className),right:Math.round(e.getBoundingClientRect().right)})).slice(0,15));console.error('Overflow diagnostics',JSON.stringify(offenders));}assert.ok(n<=1,engine+' '+name+' '+tag+' overflow: '+n)}
      await assertNoOverflow('home');
      // The reported iPhone bug must never silently fail to open a form.
      await page.locator('#new-entry').click();

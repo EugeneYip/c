@@ -150,3 +150,17 @@
 :root[data-theme="dark"] .chip.green{background:var(--mint);color:var(--mint-text)}
 @media(max-width:390px){.topbar{gap:4px;padding-inline:10px}.header-actions{gap:4px}#theme-toggle{width:40px;min-width:40px;height:40px}.header-actions .update-link:not(#theme-toggle){min-height:40px;padding-inline:7px}.header-actions .release{font-size:10px;white-space:nowrap}.identity{gap:5px}.identity strong{font-size:16px}.identity small{font-size:9px}}
 @media(max-width:335px){.topbar .foxmark{width:30px;height:30px}.header-actions .release .status-dot{display:none}.identity small{font-size:8px}}
+
+/* v2.7.2: constrain intrinsic widths (especially WebKit narrow lookup). */
+.app-shell,.screen,.lookup-grid,.settings-grid,.home-grid,.home-grid>div,.panel,.quicklist,.quick-merchant-row,#lookup-result,.result-choice,.merchant-advice,.merchant-transport{min-width:0;max-width:100%}
+.screen{grid-template-columns:minmax(0,1fr)}
+.lookup-grid,.settings-grid{width:100%;grid-template-columns:minmax(0,1fr)}
+.quick-merchant-row{width:100%;max-width:100%;min-width:0;overflow-x:auto}
+.result-choice>div{min-width:0;overflow-wrap:anywhere;flex:1}
+.result-choice .details,.lookup-result-head p,.merchant-advice p,.compare-details p,.benefit-item p,.source-row p{overflow-wrap:anywhere}
+.result-choice b{flex-shrink:0;font-size:14px}
+.card-tag{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.form-grid input,.form-grid select,#lookup-search,.transport-calc input{min-width:0;max-width:100%;width:100%}
+.form-grid label{overflow-wrap:anywhere}
+@media(min-width:690px){.lookup-grid,.settings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:360px){.result-choice{align-items:start;flex-direction:column;gap:7px}.result-choice b{white-space:normal}.result-choice>div{width:100%}.transport-calc{flex-wrap:wrap}}
