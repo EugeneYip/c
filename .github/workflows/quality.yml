@@ -21,6 +21,7 @@ jobs:
           node --check engine-v22.js
           node --check app.js
           node --check benefits.js
+          node --check theme.js
           node --check tests/browser.test.cjs
           node --check tests/engine.test.cjs
           node --check tests/benefits.test.cjs
@@ -57,6 +58,10 @@ jobs:
             engine-v22.js
             tight-v22.css
             rights.css
+            ux.css
+            theme.css
+            theme.js
+            version.json
             benefits.js
             tests/merchant-v24.test.cjs
             data/benefits.json

@@ -26,6 +26,8 @@ const path=require('node:path');
      const context=await browser.newContext({viewport:{width,height},isMobile:width<=390,hasTouch:width<=390,locale:'zh-TW'});
      const page=await context.newPage(),errs=[];
      page.on('pageerror',e=>errs.push(String(e)));
+     await page.clock.setFixedTime(new Date('2026-11-21T10:00:00Z'));
+     const missing=[];page.on('response',r=>{if(r.url().startsWith(url)&&r.status()>=400)missing.push(r.url()+': '+r.status())});
      await page.goto(url,{waitUntil:'load'});
      assert.match(await page.title(),/刷哪張/);
      assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
@@ -95,6 +97,7 @@ const path=require('node:path');
      await page.locator('#mile-value').dispatchEvent('change');
      await assertNoOverflow('settings');
      await nav('lookup').click();
+     assert.equal(await page.locator('#lookup-add').isDisabled(),true);
      for(const merchant of ['蝦皮','寶雅']){
        await page.locator('#popular-shops [data-quick="'+merchant+'"]').click();
        assert.equal(await page.locator('#lookup-search').inputValue(),merchant);
@@ -105,7 +108,7 @@ const path=require('node:path');
      await page.locator('#lookup-search').fill('50嵐');
      assert.match(await page.locator('#lookup-result').innerText(),/15 點|Richart/);
      // Real merchant search scenarios from 2026 bank and Taipei MRT official sources.
-     assert.equal(await page.locator('[data-quick]').count(),8);
+     assert.equal(await page.locator('[data-quick]').count(),12);
      await page.locator('[data-quick="高鐵"]').click();
      assert.match(await page.locator('#lookup-result').innerText(),/高鐵指定購票通路/);
      await page.locator('[data-quick="家樂福"]').click();
@@ -125,10 +128,9 @@ const path=require('node:path');
      await assertNoOverflow('lookup');
      // "檢查權益" must never merely repeat the website's version number.
      const remote='https://raw.githubusercontent.com/EugeneYip/c/main/data/check-status.json?*';
-     const checkedAt=new Date().toISOString();
+     const checkedAt='2026-11-21T09:00:00Z';
      const baseline={schemaVersion:1,checkedAt,manualReviewedAt:'2026-11-21',
-       sources:[{id:'richart',status:'unchanged',lastSuccessAt:checkedAt},
-                {id:'line_rules',status:'baseline',lastSuccessAt:checkedAt}]};
+       sources:['richart','line_rules','line_offers','line_travel','air_rules','air_perks'].map(id=>({id,status:'unchanged',lastSuccessAt:checkedAt}))};
      await page.route(remote,route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(baseline)}));
      await page.locator('#check-update').click();
      await page.locator('#benefit-check-summary').getByText(/官方公告比對紀錄/).waitFor();
@@ -158,6 +160,14 @@ const path=require('node:path');
      await page.screenshot({path:path.join(folder,engine+'-'+name+'-lookup.png'),fullPage:true});
      await nav('settings').click();
      await page.screenshot({path:path.join(folder,engine+'-'+name+'-settings.png'),fullPage:true});
+     await page.locator('#theme-choice').selectOption('dark');
+     for(const view of ['today','lookup','benefits','settings']){await nav(view).click();await assertNoOverflow('dark '+view);await page.screenshot({path:path.join(folder,engine+'-'+name+'-dark-'+view+'.png'),fullPage:true});}
+     await page.emulateMedia({colorScheme:'dark'});
+     await page.locator('#theme-choice').selectOption('system');
+     assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+     await page.emulateMedia({colorScheme:'light'});
+     await page.waitForFunction(()=>document.documentElement.dataset.theme==='light');
+     assert.deepEqual(missing,[],'missing local assets');
      assert.deepEqual(errs,[],'uncaught errors on '+engine+' '+name);
      await context.close();
      console.log(engine+' '+name+' passes: modal, form, edit, reload, settings, search, update and no overflow');

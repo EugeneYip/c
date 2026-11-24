@@ -8,6 +8,7 @@ R.PAYMENTS.card='信用卡直接刷卡';
 R.PAYMENTS.taishin='台新Pay／TWQR';
 const baseLine=R.line,baseAir=R.air;
 const usableDirect=['card','apple'];
+const storedValue=['ipass','easycard','pxpay'];
 function decorate(score,tx,method,changed){
  if(!score)return null;
  const methodName=R.PAYMENTS[method]||'信用卡直接刷卡';
@@ -23,6 +24,7 @@ function variants(tx,plan,s,used=0){
  const arr=[];
  const rich=decorate(R.rich(tx,plan,s),tx,tx.method,false);
  if(rich)arr.push(rich);
+ if(storedValue.includes(tx.method))return arr;
  if(s.cards?.line!==false){
    const methods=usableDirect.includes(tx.method)?[tx.method]:tx.method==='linepay'?['linepay','card']:['card'];
    for(const method of methods){
@@ -36,7 +38,7 @@ function variants(tx,plan,s,used=0){
    const sc=baseAir(alt,s);
    if(sc)arr.push(decorate(sc,tx,method,method!==tx.method));
  }
- return arr.sort((a,b)=>b.value-a.value||(a.card==='richart'?-1:b.card==='richart'?1:0)||(a.paymentChange?1:-1));
+ return arr.sort((a,b)=>b.value-a.value||(Number(b.card==='richart')-Number(a.card==='richart'))||(Number(a.paymentChange)-Number(b.paymentChange)));
 }
 R.cardOptions=variants;
 R.compare=(tx,plan,s,used=0)=>variants(tx,plan,s,used);

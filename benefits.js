@@ -35,9 +35,9 @@ function statusView(info,source){
  const readTime=timeTW(new Date().toISOString());
  const sources=data.sources,byId=Object.fromEntries((info.sources||[]).map(x=>[x.id,x]));
  let checked=Date.parse(info.checkedAt||""),old=!Number.isFinite(checked)||Date.now()-checked>48*3600000||checked>Date.now()+3600000;
- let changed=(info.sources||[]).some(x=>x.status==="changed"),error=(info.sources||[]).some(x=>x.status==="error");
+ let changed=(info.sources||[]).some(x=>x.status==="changed"||x.needsManualReview),error=sources.some(x=>!byId[x.id]||["error","pending"].includes(byId[x.id].status)||!["baseline","unchanged","changed"].includes(byId[x.id].status));
  let head=changed?"發現疑似官方公告變更":error?"部分銀行資料無法比對":old?"資料尚未建立或已過期":"已取得官方公告比對紀錄";
- $("benefit-check-summary").innerHTML="<strong>"+head+"</strong><p>本次讀取監測紀錄："+esc(readTime)+"</p><p>銀行官方頁面最近掃描："+esc(timeTW(info.checkedAt))+"</p><p>"+(changed?"有來源與既有機器基準不同。需重新核對官方條款後，才能修改計算規則。":old?"尚不能確認目前條款有無變化。":"機器比對僅確認來源文字有無變化，不能保證活動適用資格。")+"</p>";
+ $("benefit-check-summary").innerHTML="<strong>"+head+"</strong><p>本次讀取監測紀錄："+esc(readTime)+"</p><p>銀行官方頁面最近掃描："+esc(timeTW(info.checkedAt))+"</p><p>"+(changed?"有來源與既有機器基準不同。需重新核對官方條款後，才能修改計算規則。":old||error?"尚不能確認全部來源目前條款有無變化。":"機器比對僅確認來源文字有無變化，不能保證活動適用資格。")+"</p>";
  $("benefit-check-list").innerHTML=sources.map(src=>{
   let s=byId[src.id],diff=s?.status==="changed"&&s.diff?(s.diff.added||[]).slice(0,3).map(t=>"<p><b>疑似新增：</b>"+esc(t)+"</p>").join("")+(s.diff.removed||[]).slice(0,2).map(t=>"<p><b>疑似移除：</b>"+esc(t)+"</p>").join(""):"";
   return '<div class="source-row"><div><b>'+esc(src.name)+'</b><p>'+esc(label(s?.status))+'</p>'+(s?.lastSuccessAt?"<small>最近成功擷取："+esc(timeTW(s.lastSuccessAt))+"</small>":"")+(diff?'<details><summary>查看疑似變更內容</summary>'+diff+'<p>文字差異不等於已審核的新回饋。</p></details>':"")+'</div><a href="'+uri(src.url)+'" target="_blank" rel="noopener noreferrer">官方頁面</a></div>';

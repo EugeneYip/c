@@ -143,3 +143,6 @@ V2.1 針對手機使用者回報的問題加入以下改善：
 [臺北捷運多元支付](https://www.gov.taipei/News_Content.aspx?n=F0DDAF49B89E9413&s=49BF940AA1B9B9EE)、
 [中信 LINE Pay 一卡通](https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/index.html)、
 [台新全聯週年慶](https://mkpcard.taishinbank.com.tw/tscccms/promotion/detail/WM_20260907090737422)。
+
+## V2.7 品質修正（2026-11-23）
+修正深淺色全部頁面明確文字配色、快速通路測試過時的 8 項假設、歷史交易無聲截斷、空白店名加入、日期設定同步、票證不任意改刷卡、保費共享加碼額度及官方監測缺失來源的提示。保留既有資料。此次仍不宣稱完整銀行權益覆蓋；以實際公告與個人資格為準。

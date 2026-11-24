@@ -124,3 +124,29 @@
  #theme-toggle{font-size:0;min-width:36px;padding:5px}
  #theme-toggle::first-letter{font-size:17px}
 }
+
+/* v2.7: audit explicit foreground and surface overrides. */
+#theme-toggle{display:inline-grid;place-items:center;width:44px;height:44px;min-width:44px;padding:0}
+#theme-toggle svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.datecontrol{min-width:0}.datecontrol input[type=date]{box-sizing:border-box;min-width:0;width:100%;max-width:100%;margin:0}
+.topbar .identity{min-width:0}.identity span:last-child{min-width:0}.identity strong,.identity small{white-space:nowrap}
+.masthead{background:#b94c15}
+.primary:disabled{opacity:.55;cursor:not-allowed}
+:root[data-theme="dark"] label:not(.check),:root[data-theme="dark"] .check,:root[data-theme="dark"] .benefit-row strong,:root[data-theme="dark"] .compare-numbers b{color:var(--ink)}
+:root[data-theme="dark"] .benefit-headline,:root[data-theme="dark"] .benefit-item summary,:root[data-theme="dark"] .compare-details summary,:root[data-theme="dark"] .merchant-advice b{color:#ffc293}
+:root[data-theme="dark"] .mode-explain,:root[data-theme="dark"] .compare-details,:root[data-theme="dark"] .source-row small,:root[data-theme="dark"] .benefit-item details p{color:var(--secondary)}
+:root[data-theme="dark"] .benefit-kind{background:#44382e;color:#f5d3af}
+:root[data-theme="dark"] .compare-details,:root[data-theme="dark"] .benefit-item details{border-color:var(--line)}
+:root[data-theme="dark"] .lookup-result-head{background:#392c24;color:var(--ink)}
+:root[data-theme="dark"] .transport-calc span{color:#b1e4cf}
+:root[data-theme="dark"] .dangerbtn{background:#482a29;color:#ffc0b5;border-color:#80504c}
+:root[data-theme="dark"] .danger-text,:root[data-theme="dark"] .mini-btn.remove{color:#ffb1a2}
+:root[data-theme="dark"] .primary{background:#a94312;color:#fff}
+:root[data-theme="dark"] .primary:hover{background:#b54a17}
+:root[data-theme="dark"] .top-tabs button:not(.active){background:transparent;color:var(--secondary)}
+:root[data-theme="dark"] .skip{background:var(--paper);color:var(--ink)}
+:root[data-theme="dark"] .card-tag.line{background:#253e30;color:#a8e0b9}
+:root[data-theme="dark"] .card-tag.air{background:#38304a;color:#d9c9ff}
+:root[data-theme="dark"] .chip.green{background:var(--mint);color:var(--mint-text)}
+@media(max-width:390px){.topbar{gap:4px;padding-inline:10px}.header-actions{gap:4px}#theme-toggle{width:40px;min-width:40px;height:40px}.header-actions .update-link:not(#theme-toggle){min-height:40px;padding-inline:7px}.header-actions .release{font-size:10px;white-space:nowrap}.identity{gap:5px}.identity strong{font-size:16px}.identity small{font-size:9px}}
+@media(max-width:335px){.topbar .foxmark{width:30px;height:30px}.header-actions .release .status-dot{display:none}.identity small{font-size:8px}}
