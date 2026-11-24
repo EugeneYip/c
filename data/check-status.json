@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-11-23T08:58:49Z",
+  "checkedAt": "2026-11-24T10:53:43Z",
   "manualReviewedAt": "2026-11-21",
   "method": "Official website text fingerprint; detects differences, never authorizes changed rewards.",
   "sources": [
@@ -9,7 +9,7 @@
       "name": "Richart 權益及注意事項",
       "url": "https://mkp.taishinbank.com.tw/TsCms/marketing/expose/WM_20261103171652257/index.html",
       "status": "unchanged",
-      "lastSuccessAt": "2026-11-23T08:58:49Z",
+      "lastSuccessAt": "2026-11-24T10:53:43Z",
       "diff": {
         "added": [],
         "removed": []
@@ -21,7 +21,7 @@
       "name": "中信 LINE Pay 回饋計畫",
       "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/notice.html",
       "status": "unchanged",
-      "lastSuccessAt": "2026-11-23T08:58:49Z",
+      "lastSuccessAt": "2026-11-24T10:53:43Z",
       "diff": {
         "added": [],
         "removed": []
@@ -33,7 +33,7 @@
       "name": "中信 LINE Pay 指定店家優惠",
       "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/store.html",
       "status": "unchanged",
-      "lastSuccessAt": "2026-11-23T08:58:49Z",
+      "lastSuccessAt": "2026-11-24T10:53:43Z",
       "diff": {
         "added": [],
         "removed": []
@@ -45,7 +45,7 @@
       "name": "中信 LINE Pay 旅遊加碼",
       "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/LINEPay/page_travel.html",
       "status": "unchanged",
-      "lastSuccessAt": "2026-11-23T08:58:49Z",
+      "lastSuccessAt": "2026-11-24T10:53:43Z",
       "diff": {
         "added": [],
         "removed": []
@@ -57,7 +57,7 @@
       "name": "中信華航哩程與加碼",
       "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/index.html",
       "status": "unchanged",
-      "lastSuccessAt": "2026-11-23T08:58:49Z",
+      "lastSuccessAt": "2026-11-24T10:53:43Z",
       "diff": {
         "added": [],
         "removed": []
@@ -69,7 +69,7 @@
       "name": "中信華航卡別福利",
       "url": "https://www.ctbcbank.com/content/dam/minisite/long/creditcard/CTBCCI/feature.html",
       "status": "unchanged",
-      "lastSuccessAt": "2026-11-23T08:58:49Z",
+      "lastSuccessAt": "2026-11-24T10:53:43Z",
       "diff": {
         "added": [],
         "removed": []
